@@ -1,20 +1,74 @@
 import React, { useState } from 'react';
-// import components like Calendar, Charts, etc.
+import Toggle from '../../components/MonthlyPricing/ToggleSwitch/ToggleSwitch'
+import Calendar from '../../components/MonthlyPricing/Calender/Calender';
+import Chart from '../../components/MonthlyPricing/BarChart/BarChart';
+import Table from '../../components/MonthlyPricing/TableComponent/TableComponent';
 
-function MonthlyPricing() {
-  // Define state variables for rental price, costs, revenues, etc.
-  // Functions to handle monthly updates, toggle predatory pricing, etc.
 
+const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) => {
+  const [monthlyPrice, setMonthlyPrice] = useState('');
+  const [isPredatoryPricing, setIsPredatoryPricing] = useState(false);
+
+  const handlePriceChange = (event) => {
+    setMonthlyPrice(event.target.value);
+  };
+
+  const handlePriceSubmit = () => {
+    onPriceUpdate(monthlyPrice);
+    // Reset price input if necessary
+    setMonthlyPrice('');
+  };
+
+  const handlePredatoryPricingChange = (newState) => {
+    setIsPredatoryPricing(newState);
+    onTogglePredatoryPricing(newState);
+  };
+
+  // Render the interface
   return (
-    <div>
-        <h1>ddddd</h1>
-      {/* Calendar or timeline */}
-      {/* Input field for monthly rental price */}
-      {/* Charts and tables for revenues and costs */}
-      {/* Notifications for market events */}
-      {/* Predatory Pricing toggle */}
+    <div className="monthly-pricing">
+      <h2>Monthly Pricing and Management</h2>
+      <Calendar gameSpan={12} />
+      
+      <div className="pricing-input">
+        <label htmlFor="monthlyPrice">Set Monthly Rental Price:</label>
+        <input
+          type="number"
+          id="monthlyPrice"
+          value={monthlyPrice}
+          onChange={handlePriceChange}
+        />
+        <button onClick={handlePriceSubmit}>Update Price</button>
+      </div>
+
+      <div className="charts-and-tables">
+        {/* Chart for monthly revenue */}
+        <Chart data={gameData.revenueData} />
+        
+        {/* Table for operating costs */}
+        <Table data={gameData.operatingCosts} />
+        
+        {/* Table for competitors' revenue */}
+        <Table data={gameData.competitorsRevenue} />
+        
+        {/* Table for fixed costs */}
+        <Table data={gameData.fixedCosts} />
+      </div>
+
+      <Toggle
+        label="Predatory Pricing"
+        checked={isPredatoryPricing}
+        onChange={handlePredatoryPricingChange}
+      />
+      
+      {/* Notifications/Alerts for significant market events */}
+      {gameData.marketEvents.map((event, index) => (
+        <div key={index} className="market-event-notification">
+          {event.description}
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 export default MonthlyPricing;
