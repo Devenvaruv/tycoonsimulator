@@ -4,6 +4,8 @@ import PropertyPurchase from './pages/PropertyPurchase/PropertyPurchase';
 import MonthlyPricing from './pages/MonthlyPricing/MonthlyPricing';
 import GameOutcome from './pages/GameOutcome/GameOutcome';
 import Faq from './pages/Faq/Faq';
+import Home from './pages/Home/Home';
+import Contact from './pages/Contact/Contact';
 
 import Header from './components/Header/Header';
 
@@ -50,10 +52,12 @@ function App() {
     <BrowserRouter>
     <Header />
       <Routes>
-        <Route exact path="/" element={<PropertyPurchase/>} />
+        <Route exact path="/" element={<Home/>} />
+        <Route path="/property-purchase" element={<PropertyPurchase />} />
         <Route path="/monthly-pricing" element={<MonthlyPricing gameData={gameData}/>} />
         <Route path="/game-outcome" element={<GameOutcome/>} />
         <Route path="/faq" element={<Faq/>} />
+        <Route path="/contact" element={<Contact/>} />
       </Routes>
       
     </BrowserRouter>
