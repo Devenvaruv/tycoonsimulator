@@ -7,10 +7,20 @@ const PropertyInputForm = ({ onSubmit }) => {
   const [numberOfRooms, setNumberOfRooms] = useState('');
   const [bathrooms, setBathrooms] = useState('');
   const [propertyType, setPropertyType] = useState('');
+  const [error, setError] = useState('');
 
   // Handle the form submission
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevents the default form submit action (page reload)
+
+    if (parseInt(bathrooms) >= parseInt(numberOfRooms)) {
+      setError('Invalid number of rooms or bathrooms');
+      return; // Stop the form submission
+    }
+
+    setError('');
+
+
     const propertyData = {
       zipCode,
       numberOfRooms,
@@ -22,6 +32,7 @@ const PropertyInputForm = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {error && <div className="error-message">{error}</div>}
       <div>
         <label htmlFor="zipCode">Zip Code:</label>
         <input
@@ -63,7 +74,7 @@ const PropertyInputForm = ({ onSubmit }) => {
           {/* Add more property types as needed */}
         </select>
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit">Start Simulation</button>
       
     </form>
   );

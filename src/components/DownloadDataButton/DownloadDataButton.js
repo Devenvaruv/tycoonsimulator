@@ -23,7 +23,7 @@ const DownloadDataButton = ({ data, filename }) => {
 
   return (
     <button onClick={handleDownload}>
-      Download Data
+      Download Resource
     </button>
   );
 };

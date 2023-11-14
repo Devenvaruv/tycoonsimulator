@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -7,12 +7,12 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.logo}>Tycoon Sim</div>
       <nav className={styles.nav}>
-        <Link to="/">Introduction</Link>
-        <Link to="/property-purchase">PropertyPurchase</Link>
-        <Link to="/monthly-pricing">MonthlyPricing</Link>
-        <Link to="/game-outcome">GameOutcome</Link>
-        <Link to="/faq">FAQ</Link>
-        <Link to="/contact">Contact</Link>
+      <NavLink to="/" activeClassName={styles.active}>Introduction</NavLink>
+        <NavLink to="/property-purchase" activeClassName={styles.active}>PropertyPurchase</NavLink>
+        <NavLink to="/monthly-pricing" activeClassName={styles.active}>MonthlyPricing</NavLink>
+        <NavLink to="/game-outcome" activeClassName={styles.active}>GameOutcome</NavLink>
+        <NavLink to="/faq" activeClassName={styles.active}>FAQ</NavLink>
+        <NavLink to="/contact" activeClassName={styles.active}>Contact</NavLink>
       </nav>
     </header>
   );

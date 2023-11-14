@@ -27,23 +27,29 @@ const PropertyPurchase = () => {
 
   return (
     <div className="property-purchase-container">
-      <h1>Property Purchase and Analysis</h1>
+      
       <div className="top-content">
         <div className="table-container">
-          <PropertiesTable />
+        <h1>Data Download</h1>
+    <p>You can download all the data related to the selected properties from here.</p>
+          <DownloadDataButton filename="SelectedPropertyDetails.txt"/>
+          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="150" height="150"/>
+          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="150" height="150"/>
         </div>
         {/* Move the map-container here, between table-container and chart-container */}
         <div className="map-container">
-          <img src='https://www.keymaps.com/cdn/shop/products/ScreenShot2022-07-07at2.58.46PM_300x300.jpg?v=1657224372' alt='Map of Austin' width="700" height="700"/>
+          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
+          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
+        </div>
+        <div className="map-container">
+        <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
+          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
         </div>
         <div className="chart-container">
           <RevenueCostChart revenue={revenue} cost={cost}/>
           <div className="bottom-content">
         <div className="form-container">
           <PropertyInputForm onSubmit={handleFormSubmit}/>
-        </div>
-        <div className="download-button-container">
-          <DownloadDataButton filename="SelectedPropertyDetails.txt"/>
         </div>
       </div>
         </div>
