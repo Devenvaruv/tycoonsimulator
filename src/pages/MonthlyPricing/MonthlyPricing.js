@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-//import Toggle from '../../components/MonthlyPricing/ToggleSwitch/ToggleSwitch'
-import Calendar from '../../components/MonthlyPricing/Calender/Calender';
-import Chart from '../../components/MonthlyPricing/BarChart/BarChart';
+
+import HorizontalTable from '../../components/HorizontalTable/HorizontalTable';
+import PropertySellForm from '../../components/PropertySellForm/PropertySellForm';
 import Table from '../../components/MonthlyPricing/TableComponent/TableComponent';
 import PropertiesTable from '../../components/PropertiesTable/PropertiesTable';
 import RevenueCostChart from '../../components/RevenueCostChart/RevenueCostChart';
@@ -53,20 +53,16 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
       
       <div className="top-content">
         <div className="table-container">
-        <h1>Data Download</h1>
-    <p>You can download all the data related to the selected properties from here.</p>
+          <h1>Data Download</h1>
+          <p>You can download all the data related to the selected properties from here.</p>
           <DownloadDataButton filename="SelectedPropertyDetails.txt"/>
           <h1>Revnue</h1>
           <h1>Demand</h1>
           <h1>ForeCasting</h1>
-          
          
-          <Table data={gameData.competitorsRevenue} />
-          
-    
+          <HorizontalTable />
         </div>
-        {/* Move the map-container here, between table-container and chart-container */}
-       
+
         <div className="map-container">
         <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
           <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
@@ -74,8 +70,8 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
         <div className="chart-container">
           <RevenueCostChart revenue={revenue} cost={cost}/>
           <div className="bottom-content">
-        <div className="form-container">
-          <PropertyInputForm onSubmit={handleFormSubmit}/>
+        <div  className="form-container">
+          <PropertySellForm onSubmit={handleFormSubmit}/>
         </div>
       </div>
         </div>
