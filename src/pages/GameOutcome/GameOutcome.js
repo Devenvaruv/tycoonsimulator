@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 const playerData = [
-  { id: 1, name: 'Player 1', score: 1500 },
-  { id: 2, name: 'Player 2', score: 1200 },
-  { id: 3, name: 'Player 3', score: 1800 },
-
+  { id: 1, name: 'John Doe', score: 2300 },
+  { id: 2, name: 'Jane Smith', score: 1800 },
+  { id: 3, name: 'Bob Johnson', score: 2100 },
+  { id: 4, name: 'Alice Williams', score: 1900 },
 ];
 
 function Leaderboard({ players }) {
