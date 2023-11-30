@@ -5,7 +5,7 @@ import DownloadDataButton from '../../components/DownloadDataButton/DownloadData
 import './PropertyPurchase.css';
 
 
-const PropertyPurchase = () => {
+const PropertyPurchase = (gameStart) => {
   const [revenue, setRevenue] = useState(10000);
   const [cost, setCost] = useState(0);
   const [propertyData, setPropertyData] = useState(null);

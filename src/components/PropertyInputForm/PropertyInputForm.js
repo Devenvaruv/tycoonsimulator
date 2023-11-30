@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './PropertyInputForm.css'
+import { useNavigate } from 'react-router-dom';
+
 
 const PropertyInputForm = ({ onSubmit }) => {
   // State for each input field
@@ -8,6 +10,7 @@ const PropertyInputForm = ({ onSubmit }) => {
   const [bathrooms, setBathrooms] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   // Handle the form submission
   const handleSubmit = (event) => {
@@ -50,6 +53,8 @@ const PropertyInputForm = ({ onSubmit }) => {
       propertyType,
     };
     onSubmit(propertyData); // Pass the data back up to the parent component
+
+    navigate('/monthly-pricing');
   };
 
   function isTexasZipcode(zipCode) {

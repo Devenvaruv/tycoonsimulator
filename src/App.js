@@ -47,13 +47,33 @@ const gameData = {
   ],
 };
 
+const userData = {
+  name: '',
+  score: '',
+  date: '',
+}
+
+const currentGameData = {
+  zipCode: '',
+      numberOfRooms: '',
+      bathrooms: '',
+      propertyType: '',
+}
+
+const gameStart = (data) => {
+  currentGameData.zipCode = data.zipCode;
+  currentGameData.numberOfRooms = data.numberOfRooms;
+  currentGameData.bathrooms = data.bathrooms;
+  currentGameData.propertyType = data.propertyType;
+}
+
 function App() {
   return (
     <BrowserRouter>
     <Header />
       <Routes>
         <Route exact path="/" element={<Home/>} />
-        <Route path="/property-purchase" element={<PropertyPurchase />} />
+        <Route path="/property-purchase" element={<PropertyPurchase onGameStart={ gameStart}/>} />
         <Route path="/monthly-pricing" element={<MonthlyPricing gameData={gameData}/>} />
         <Route path="/game-outcome" element={<GameOutcome/>} />
         <Route path="/faq" element={<Faq/>} />
