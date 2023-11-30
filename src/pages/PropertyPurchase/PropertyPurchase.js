@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropertiesTable from '../../components/PropertiesTable/PropertiesTable';
 import RevenueCostChart from '../../components/RevenueCostChart/RevenueCostChart';
 import PropertyInputForm from '../../components/PropertyInputForm/PropertyInputForm';
 import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';

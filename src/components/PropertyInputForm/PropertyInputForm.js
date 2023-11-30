@@ -14,9 +14,31 @@ const PropertyInputForm = ({ onSubmit }) => {
     event.preventDefault(); // Prevents the default form submit action (page reload)
 
     if (parseInt(bathrooms) >= parseInt(numberOfRooms)) {
-      setError('Invalid number of rooms or bathrooms');
+      setError('Invalid number of bathrooms or rooms');
       return; // Stop the form submission
     }
+
+    if ((parseInt(bathrooms) >= 10) || (parseInt(bathrooms) <= 0 ) || (!bathrooms)) {
+      setError('bathrooms must be between 0 and 10')
+      return;
+    }
+
+    if ((parseInt(numberOfRooms) >= 10) || (parseInt(numberOfRooms) <= 0 ) || (!numberOfRooms)) {
+      setError('room must be between 0 and 10')
+      return;
+    }
+
+    if (!isTexasZipcode(zipCode)) {
+      setError('Zipcode must be valid and from Texas');
+      return; // Stop the form submission
+    }
+
+    if (!propertyType) {
+      setError('Please select a property type');
+      return; // Stop the form submission
+    }
+
+    
 
     setError('');
 
@@ -29,6 +51,12 @@ const PropertyInputForm = ({ onSubmit }) => {
     };
     onSubmit(propertyData); // Pass the data back up to the parent component
   };
+
+  function isTexasZipcode(zipCode) {
+    const regex = /^(75[0-9]{3}|76[0-9]{3}|77[0-9]{3}|78[0-9]{3}|79[0-8][0-9]{2}|799[0-9]{2}|8851[0-9])$/;
+    return regex.test(zipCode);
+  }
+  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -71,7 +99,7 @@ const PropertyInputForm = ({ onSubmit }) => {
           <option value="apartment">Apartment</option>
           <option value="house">House</option>
           <option value="condo">Condo</option>
-          {/* Add more property types as needed */}
+          
         </select>
       </div>
       <button type="submit">Start Simulation</button>
