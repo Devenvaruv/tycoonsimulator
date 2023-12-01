@@ -1,0 +1,12 @@
+.table-sm {
+    width: 50%;
+    font-size: 0.8rem;
+    margin: auto;
+    border-collapse: collapse;
+  }
+  
+  .th-td-sm {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+  }

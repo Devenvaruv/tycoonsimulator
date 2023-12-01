@@ -7,6 +7,7 @@ import PropertiesTable from '../../components/PropertiesTable/PropertiesTable';
 import RevenueCostChart from '../../components/RevenueCostChart/RevenueCostChart';
 import PropertyInputForm from '../../components/PropertyInputForm/PropertyInputForm';
 import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
+import DemandVsTimeGraph from '../../components/DemandVsTimeGraph/DemandVsTimeGraph';
 
 
 const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) => {
@@ -68,7 +69,9 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
           <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
         </div>
         <div className="chart-container">
-          <RevenueCostChart revenue={revenue} cost={cost}/>
+          <DemandVsTimeGraph />
+          
+          {/* <RevenueCostChart revenue={revenue} cost={cost}/> */}
           <div className="bottom-content">
         <div  className="form-container">
           <PropertySellForm onSubmit={handleFormSubmit}/>
