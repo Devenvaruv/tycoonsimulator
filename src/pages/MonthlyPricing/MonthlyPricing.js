@@ -20,7 +20,6 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
 
   const handlePriceSubmit = () => {
     onPriceUpdate(monthlyPrice);
-    // Reset price input if necessary
     setMonthlyPrice('');
   };
 
@@ -31,22 +30,38 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
 
   
   const handleFormSubmit = (data) => {
-    const updatedWeeklyRentData = [...weeklyRentData];
-    updatedWeeklyRentData[parseInt(data.rentOption) - 1] = parseFloat(data.currentRentPrice);
+    // const updatedWeeklyRentData = [...weeklyRentData];
+    // updatedWeeklyRentData[parseInt(data.rentOption) - 1] = parseFloat(data.currentRentPrice);
+    // setWeeklyRentData(updatedWeeklyRentData);
+    // setPropertyData(data); // You can use this data to display in PropertiesTable or elsewhere
+    // calculateCostAndRevenue(data);
+    // console.log(data)
+
+    console.log('Form data:', data.currentRentPrice); // Log the raw form data
+  const weekIndex = parseInt(data.currentRentPrice, 10) - 1; // Always use radix 10 for parseInt
+  console.log('Parsed week index:', weekIndex); // Check the parsed index
+  const updatedWeeklyRentData = [...weeklyRentData];
+  
+  // Check if weekIndex is a number and within the expected range
+  if (!isNaN(weekIndex) && weekIndex >= 0 && weekIndex < updatedWeeklyRentData.length) {
+    updatedWeeklyRentData[weekIndex] = parseFloat(data.currentRentPrice);
     setWeeklyRentData(updatedWeeklyRentData);
-    setPropertyData(data); // You can use this data to display in PropertiesTable or elsewhere
-    calculateCostAndRevenue(data);
-    console.log(data);
+  } else {
+    console.error('Invalid week index:', weekIndex);
+  }
+
+  setPropertyData(data); // Additional logic...
   };
 
-  const calculateCostAndRevenue = (data) => {
-    // Implement your logic to calculate cost and revenue based on propertyData
-    // For example, let's say cost is $1000 per room and revenue is $1500 per room
-    const calculatedCost = data.numberOfRooms * 1000;
-    const calculatedRevenue = revenue - calculatedCost;
-    setCost(calculatedCost);
-    setRevenue(calculatedRevenue);
-  };
+  // const calculateCostAndRevenue = (data) => {
+  //   // Implement your logic to calculate cost and revenue based on propertyData
+  //   // For example, let's say cost is $1000 per room and revenue is $1500 per room
+  //   const calculatedCost = data.numberOfRooms * 1000;
+  //   const calculatedRevenue = revenue - calculatedCost;
+  //   setCost(calculatedCost);
+  //   setRevenue(calculatedRevenue);
+  // };
+
   const graphData = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, demand: rent }));
 
   // Render the interface

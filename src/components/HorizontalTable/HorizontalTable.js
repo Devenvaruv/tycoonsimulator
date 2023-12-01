@@ -2,6 +2,7 @@ import React from 'react';
 import './HorizontalTable.css'; // Make sure the path to your CSS file is correct
 
 const HorizontalTable = ({ data }) => { // Accept data as a prop
+  console.log('Table data:', data);
   // Use the data prop to display the income for each week
   const weeks = data.map((income, i) => `Week ${i + 1}`);
 
