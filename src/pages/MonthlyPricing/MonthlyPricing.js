@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 
 import HorizontalTable from '../../components/HorizontalTable/HorizontalTable';
 import PropertySellForm from '../../components/PropertySellForm/PropertySellForm';
-import Table from '../../components/MonthlyPricing/TableComponent/TableComponent';
-import PropertiesTable from '../../components/PropertiesTable/PropertiesTable';
-import RevenueCostChart from '../../components/RevenueCostChart/RevenueCostChart';
-import PropertyInputForm from '../../components/PropertyInputForm/PropertyInputForm';
 import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
 import DemandVsTimeGraph from '../../components/DemandVsTimeGraph/DemandVsTimeGraph';
 
@@ -16,6 +12,7 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
   const [revenue, setRevenue] = useState(10000);
   const [cost, setCost] = useState(0);
   const [propertyData, setPropertyData] = useState(null);
+  const [weeklyRentData, setWeeklyRentData] = useState(Array(12).fill(0));
 
   const handlePriceChange = (event) => {
     setMonthlyPrice(event.target.value);
@@ -34,8 +31,12 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
 
   
   const handleFormSubmit = (data) => {
+    const updatedWeeklyRentData = [...weeklyRentData];
+    updatedWeeklyRentData[parseInt(data.rentOption) - 1] = parseFloat(data.currentRentPrice);
+    setWeeklyRentData(updatedWeeklyRentData);
     setPropertyData(data); // You can use this data to display in PropertiesTable or elsewhere
     calculateCostAndRevenue(data);
+    console.log(data);
   };
 
   const calculateCostAndRevenue = (data) => {
@@ -46,6 +47,7 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
     setCost(calculatedCost);
     setRevenue(calculatedRevenue);
   };
+  const graphData = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, demand: rent }));
 
   // Render the interface
    return (
@@ -60,70 +62,26 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
           <h1>Revnue</h1>
           <h1>Demand</h1>
           <h1>ForeCasting</h1>
+          <h1> competitors in the zipcode</h1>
+          
          
-          <HorizontalTable />
+          <HorizontalTable data={weeklyRentData}/>
         </div>
 
-        <div className="map-container">
-        <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
-          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300"/>
+        <div>
+          <p>random event</p>
         </div>
         <div className="chart-container">
-          <DemandVsTimeGraph />
-          
-          {/* <RevenueCostChart revenue={revenue} cost={cost}/> */}
+          <DemandVsTimeGraph data={graphData}/>
           <div className="bottom-content">
         <div  className="form-container">
-          <PropertySellForm onSubmit={handleFormSubmit}/>
+          <PropertySellForm onSell={handleFormSubmit}/>
         </div>
       </div>
         </div>
       </div>
       
     </div>
-
-  //   <div className="monthly-pricing">
-  //     <h2>Monthly Pricing and Management</h2>
-  //     <Calendar gameSpan={12} />
-      
-  //     <div className="pricing-input">
-  //       <label htmlFor="monthlyPrice">Set Monthly Rental Price:</label>
-  //       <input
-  //         type="number"
-  //         id="monthlyPrice"
-  //         value={monthlyPrice}
-  //         onChange={handlePriceChange}
-  //       />
-  //       <button onClick={handlePriceSubmit}>Update Price</button>
-  //     </div>
-
-  //     <div className="charts-and-tables">
-  //       {/* Chart for monthly revenue */}
-  //       <Chart data={gameData.revenueData} />
-        
-  //       {/* Table for operating costs */}
-  //       <Table data={gameData.operatingCosts} />
-        
-  //       {/* Table for competitors' revenue */}
-  //       <Table data={gameData.competitorsRevenue} />
-        
-  //       {/* Table for fixed costs */}
-  //       <Table data={gameData.fixedCosts} />
-  //     </div>
-
-  //     {/* <Toggle
-  //       label="Predatory Pricing"
-  //       checked={isPredatoryPricing}
-  //       onChange={handlePredatoryPricingChange}
-  //     /> */}
-      
-  //     {/* Notifications/Alerts for significant market events */}
-  //     {gameData.marketEvents.map((event, index) => (
-  //       <div key={index} className="market-event-notification">
-  //         {event.description}
-  //       </div>
-  //     ))}
-  //   </div>
   );
 };
 

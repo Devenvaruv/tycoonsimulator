@@ -1,10 +1,9 @@
 import React from 'react';
 import './HorizontalTable.css'; // Make sure the path to your CSS file is correct
 
-const HorizontalTable = () => {
-  // Boilerplate data for 12 weeks
-  const weeks = Array.from({ length: 12 }, (_, i) => `Week ${i + 1}`);
-  const income = '1000'; // assuming income is the same for all weeks for boilerplate
+const HorizontalTable = ({ data }) => { // Accept data as a prop
+  // Use the data prop to display the income for each week
+  const weeks = data.map((income, i) => `Week ${i + 1}`);
 
   return (
     <table className="table-sm">
@@ -17,7 +16,7 @@ const HorizontalTable = () => {
       </thead>
       <tbody>
         <tr>
-          {weeks.map((_, index) => (
+          {data.map((income, index) => (
             <td key={index} className="th-td-sm">{income}</td>
           ))}
         </tr>
