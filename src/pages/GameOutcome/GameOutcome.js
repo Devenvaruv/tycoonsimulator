@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react';
-
-const differentSamplePlayerData = [
-  { id: 1, name: 'Michael Jordan', score: 2500 },
-  { id: 2, name: 'LeBron James', score: 2200 },
-  { id: 3, name: 'Kobe Bryant', score: 2000 },
-  { id: 4, name: 'Shaquille O`Neal', score: 1800 },
-  // Add more player data as needed
-];
+import './Leaderboard.css'; // Assuming you create a CSS file for styles
 
 function Leaderboard({ players }) {
   return (
-    <div>
+    <div className="leaderboard">
       <h2>Leaderboard</h2>
-      <ul>
-        {players.map((player) => (
-          <li key={player.id}>
-            {player.name}: {player.score} points
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {players.map((player, index) => (
+            <tr key={player.id}>
+              <td>{index + 1}</td>
+              <td>{player.userId}</td>
+              <td>{player.date}</td>
+              <td>{player.score}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -27,15 +33,24 @@ function GameOutcome() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    // For demonstration, using a different set of sample playerData
-    setPlayers(differentSamplePlayerData);
+    fetch('https://gamerecords-405919.wn.r.appspot.com/findAllGameRecord')
+      .then(response => response.json())
+      .then(data => {
+        const sortedData = data.sort((a, b) => b.score - a.score);
+        setPlayers(sortedData.map((player, index) => ({
+          ...player,
+          rank: index + 1 // Adding rank property
+        })));
+      })
+      .catch(error => {
+        console.error('Error fetching data: ', error);
+      });
   }, []);
 
   return (
     <div>
-      <h1>Game Outcome</h1>
+      
       <Leaderboard players={players} />
-      {/* Other components like Player cards, property details, etc. */}
     </div>
   );
 }

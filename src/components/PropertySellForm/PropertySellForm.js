@@ -56,11 +56,11 @@ const PropertySellForm = ({ onSell }) => {
           onChange={(e) => setRentOption(e.target.value)}
         >
           <option value="">Select Rent Option</option>
-          <option value="rooms">Number of Rooms</option>
+         
           <option value="whole">Whole Property</option>
         </select>
       </div>
-      <button type="submit">Sell Property</button>
+      <button type="submit">Rent Property</button>
     </form>
   );
 };

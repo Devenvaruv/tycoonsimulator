@@ -1,0 +1,35 @@
+.leaderboard {
+    max-width: 800px; /* Increased table width */
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.1em; /* Larger font size for better readability */
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 12px; /* Increased padding for a more spacious look */
+  }
+  
+  th {
+    background-color: #4CAF50; /* Changed header background for a distinct look */
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1; /* Color changes when hovering over rows */
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  

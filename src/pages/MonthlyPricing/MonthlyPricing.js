@@ -19,6 +19,8 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
   const {currentGameData} = useContext(GameDataContext);
   const navigate = useNavigate();
+  const [showCongratsModal, setShowCongratsModal] = useState(false);
+const [userName, setUserName] = useState('');
 
 
   const handlePriceChange = (event) => {
@@ -33,6 +35,11 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
   const handlePredatoryPricingChange = (newState) => {
     //setIsPredatoryPricing(newState);
     onTogglePredatoryPricing(newState);
+  };
+
+  const handleModalClose = () => {
+    setShowCongratsModal(false);
+    navigate('/game-outcome', { state: { userName } }); // Pass userName in state if needed
   };
 
   
@@ -65,7 +72,8 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     // Move to the next week
     setCurrentWeekIndex(currentWeekIndex + 1);
   } else {
-    navigate('/game-outcome');
+    setShowCongratsModal(true);
+   
     // Handle the case when all weeks have been filled
     console.log('All weeks have been filled');
     
@@ -91,7 +99,7 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     
     <div className="property-purchase-container">
       
-      <div className="top-content">
+      {!showCongratsModal &&(<div className="top-content">
         <div className="table-container">
           <h1>Data Download</h1>
           <p>You can download all the data related to the selected properties from here.</p>
@@ -118,7 +126,25 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
         </div>
       </div>
         </div>
+      </div>)}
+
+      
+    {/* Modal for congratulating the user */}
+    {showCongratsModal && (
+      <div className="modal">
+        <div className="modal-content">
+          <h2>Congratulations!</h2>
+          <p>Please enter your name to see the results.</p>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <button onClick={handleModalClose}>Continue</button>
+        </div>
       </div>
+    )}
       
     </div>
   );
