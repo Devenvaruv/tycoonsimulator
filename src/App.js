@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PropertyPurchase from './pages/PropertyPurchase/PropertyPurchase';
 import MonthlyPricing from './pages/MonthlyPricing/MonthlyPricing';
@@ -60,21 +61,32 @@ const currentGameData = {
       propertyType: '',
 }
 
-const gameStart = (data) => {
-  currentGameData.zipCode = data.zipCode;
-  currentGameData.numberOfRooms = data.numberOfRooms;
-  currentGameData.bathrooms = data.bathrooms;
-  currentGameData.propertyType = data.propertyType;
-}
+
 
 function App() {
+  const [currentGameData, setCurrentGameData] = useState({
+    zipCode: '',
+    numberOfRooms: '',
+    bathrooms: '',
+    propertyType: '',
+  });
+  const gameStart = (data) => {
+    setCurrentGameData({
+      zipCode: data.zipCode,
+      numberOfRooms: data.numberOfRooms,
+      bathrooms: data.bathrooms,
+      propertyType: data.propertyType,
+    });
+  }
+
+
   return (
     <BrowserRouter>
     <Header />
       <Routes>
         <Route exact path="/" element={<Home/>} />
         <Route path="/property-purchase" element={<PropertyPurchase onGameStart={ gameStart}/>} />
-        <Route path="/monthly-pricing" element={<MonthlyPricing gameData={gameData}/>} />
+        <Route path="/monthly-pricing" element={<MonthlyPricing gameData={gameData} currentGameData={currentGameData}/>} />
         <Route path="/game-outcome" element={<GameOutcome/>} />
         <Route path="/faq" element={<Faq/>} />
         <Route path="/contact" element={<Contact/>} />

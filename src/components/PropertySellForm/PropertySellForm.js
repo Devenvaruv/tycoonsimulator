@@ -33,6 +33,7 @@ const PropertySellForm = ({ onSell }) => {
 
     // Add navigation if needed
     // navigate('/some-route');
+    setCurrentRentPrice('');
   };
 
   return (

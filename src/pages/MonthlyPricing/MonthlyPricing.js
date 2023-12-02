@@ -6,13 +6,14 @@ import DownloadDataButton from '../../components/DownloadDataButton/DownloadData
 import DemandVsTimeGraph from '../../components/DemandVsTimeGraph/DemandVsTimeGraph';
 
 
-const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) => {
+const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing, currentGameData }) => {
   const [monthlyPrice, setMonthlyPrice] = useState('');
   const [isPredatoryPricing, setIsPredatoryPricing] = useState(false);
   const [revenue, setRevenue] = useState(10000);
   const [cost, setCost] = useState(0);
   const [propertyData, setPropertyData] = useState(null);
   const [weeklyRentData, setWeeklyRentData] = useState(Array(12).fill(0));
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
   const handlePriceChange = (event) => {
     setMonthlyPrice(event.target.value);
@@ -24,7 +25,7 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
   };
 
   const handlePredatoryPricingChange = (newState) => {
-    setIsPredatoryPricing(newState);
+    //setIsPredatoryPricing(newState);
     onTogglePredatoryPricing(newState);
   };
 
@@ -37,17 +38,31 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
     // calculateCostAndRevenue(data);
     // console.log(data)
 
-    console.log('Form data:', data.currentRentPrice); // Log the raw form data
-  const weekIndex = parseInt(data.currentRentPrice, 10) - 1; // Always use radix 10 for parseInt
-  console.log('Parsed week index:', weekIndex); // Check the parsed index
-  const updatedWeeklyRentData = [...weeklyRentData];
+  //   console.log('Form data:', data.currentRentPrice); // Log the raw form data
+  // const weekIndex = parseInt(data.currentRentPrice, 10) - 1; // Always use radix 10 for parseInt
+  // console.log('Parsed week index:', weekIndex); // Check the parsed index
+  // const updatedWeeklyRentData = [...weeklyRentData];
   
-  // Check if weekIndex is a number and within the expected range
-  if (!isNaN(weekIndex) && weekIndex >= 0 && weekIndex < updatedWeeklyRentData.length) {
-    updatedWeeklyRentData[weekIndex] = parseFloat(data.currentRentPrice);
+  // // Check if weekIndex is a number and within the expected range
+  // if (!isNaN(weekIndex) && weekIndex >= 0 && weekIndex < updatedWeeklyRentData.length) {
+  //   updatedWeeklyRentData[weekIndex] = parseFloat(data.currentRentPrice);
+  //   setWeeklyRentData(updatedWeeklyRentData);
+  // } else {
+  //   console.error('Invalid week index:', weekIndex);
+  // }
+  if (currentWeekIndex < weeklyRentData.length) {
+    const updatedWeeklyRentData = [...weeklyRentData];
+    updatedWeeklyRentData[currentWeekIndex] = parseFloat(data.currentRentPrice) || 0;
     setWeeklyRentData(updatedWeeklyRentData);
+    console.log("devebe" ,currentGameData)
+
+    // Move to the next week
+    setCurrentWeekIndex(currentWeekIndex + 1);
   } else {
-    console.error('Invalid week index:', weekIndex);
+    // Handle the case when all weeks have been filled
+    console.log('All weeks have been filled');
+    
+    // Optionally reset or do something else
   }
 
   setPropertyData(data); // Additional logic...
@@ -91,6 +106,7 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing }) =
           <div className="bottom-content">
         <div  className="form-container">
           <PropertySellForm onSell={handleFormSubmit}/>
+          <p>{}</p>
         </div>
       </div>
         </div>
