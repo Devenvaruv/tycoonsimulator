@@ -7,6 +7,7 @@ import GameOutcome from './pages/GameOutcome/GameOutcome';
 import Faq from './pages/Faq/Faq';
 import Home from './pages/Home/Home';
 import Contact from './pages/Contact/Contact';
+import { GameDataProvider } from '../src/utils/GameDataContext';
 
 import Header from './components/Header/Header';
 
@@ -81,6 +82,7 @@ function App() {
 
 
   return (
+    <GameDataProvider>
     <BrowserRouter>
     <Header />
       <Routes>
@@ -93,6 +95,7 @@ function App() {
       </Routes>
       
     </BrowserRouter>
+    </GameDataProvider>
   );
 }
 

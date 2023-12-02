@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import HorizontalTable from '../../components/HorizontalTable/HorizontalTable';
 import PropertySellForm from '../../components/PropertySellForm/PropertySellForm';
 import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
 import DemandVsTimeGraph from '../../components/DemandVsTimeGraph/DemandVsTimeGraph';
+import { GameDataProvider } from '../../utils/GameDataContext';
+import { GameDataContext } from '../../utils/GameDataContext';
 
-
-const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing, currentGameData }) => {
+const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) => {
   const [monthlyPrice, setMonthlyPrice] = useState('');
   const [isPredatoryPricing, setIsPredatoryPricing] = useState(false);
   const [revenue, setRevenue] = useState(10000);
@@ -14,6 +17,9 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing, cur
   const [propertyData, setPropertyData] = useState(null);
   const [weeklyRentData, setWeeklyRentData] = useState(Array(12).fill(0));
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+  const {currentGameData} = useContext(GameDataContext);
+  const navigate = useNavigate();
+
 
   const handlePriceChange = (event) => {
     setMonthlyPrice(event.target.value);
@@ -59,6 +65,7 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing, cur
     // Move to the next week
     setCurrentWeekIndex(currentWeekIndex + 1);
   } else {
+    navigate('/game-outcome');
     // Handle the case when all weeks have been filled
     console.log('All weeks have been filled');
     
@@ -89,7 +96,8 @@ const MonthlyPricing = ({ gameData, onPriceUpdate, onTogglePredatoryPricing, cur
           <h1>Data Download</h1>
           <p>You can download all the data related to the selected properties from here.</p>
           <DownloadDataButton filename="SelectedPropertyDetails.txt"/>
-          <h1>Revnue</h1>
+          <h1>{currentGameData.zipCode}</h1>
+          <h3>{currentGameData.propertyType}</h3>
           <h1>Demand</h1>
           <h1>ForeCasting</h1>
           <h1> competitors in the zipcode</h1>

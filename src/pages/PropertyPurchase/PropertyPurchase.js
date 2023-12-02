@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import RevenueCostChart from '../../components/RevenueCostChart/RevenueCostChart';
 import PropertyInputForm from '../../components/PropertyInputForm/PropertyInputForm';
 import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
 import './PropertyPurchase.css';
+import { GameDataContext } from '../../utils/GameDataContext';
 
 
-const PropertyPurchase = (gameStart) => {
+
+const PropertyPurchase = () => {
   const [revenue, setRevenue] = useState(10000);
   const [cost, setCost] = useState(0);
   const [propertyData, setPropertyData] = useState(null);
+  const { gameStart } = useContext(GameDataContext);
 
   const handleFormSubmit = (data) => {
     setPropertyData(data); // You can use this data to display in PropertiesTable or elsewhere
     calculateCostAndRevenue(data);
+    gameStart(data);
   };
   const calculateCostAndRevenue = (data) => {
     // Implement your logic to calculate cost and revenue based on propertyData
