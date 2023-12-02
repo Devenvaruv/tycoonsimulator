@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 
 const PropertySellForm = ({ onSell }) => {
   // State for each input field
   const [currentRentPrice, setCurrentRentPrice] = useState('');
   const [rentOption, setRentOption] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  
 
   // Handle the form submission
   const handleSubmit = (event) => {
@@ -22,6 +22,11 @@ const PropertySellForm = ({ onSell }) => {
       return;
     }
 
+    if ((currentRentPrice < 1) || (currentRentPrice > 10000)){
+      setError("Please enter rent between 0 and 10000");
+      return;
+    }
+
     setError('');
 
     const propertySellData = {
@@ -30,9 +35,6 @@ const PropertySellForm = ({ onSell }) => {
     };
 
     onSell(propertySellData); // Pass the data back up to the parent component
-
-    // Add navigation if needed
-    // navigate('/some-route');
     setCurrentRentPrice('');
   };
 

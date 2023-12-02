@@ -11,16 +11,15 @@ import { GameDataContext } from '../../utils/GameDataContext';
 
 const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) => {
   const [monthlyPrice, setMonthlyPrice] = useState('');
-  const [isPredatoryPricing, setIsPredatoryPricing] = useState(false);
-  const [revenue, setRevenue] = useState(10000);
-  const [cost, setCost] = useState(0);
   const [propertyData, setPropertyData] = useState(null);
   const [weeklyRentData, setWeeklyRentData] = useState(Array(12).fill(0));
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
   const {currentGameData} = useContext(GameDataContext);
   const navigate = useNavigate();
   const [showCongratsModal, setShowCongratsModal] = useState(false);
-const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [demandFactors, setDemandFactors] = useState(Array(12).fill(1));
+  const [weeklyPrices, setWeeklyPrices] = useState(Array(12).fill(0));
 
 
   const handlePriceChange = (event) => {
@@ -38,6 +37,10 @@ const [userName, setUserName] = useState('');
   };
 
   const handleModalClose = () => {
+    if(!userName){
+      alert('Please enter a username');
+      return;
+    }
     setShowCongratsModal(false);
     navigate('/game-outcome', { state: { userName } }); // Pass userName in state if needed
   };
@@ -63,14 +66,35 @@ const [userName, setUserName] = useState('');
   // } else {
   //   console.error('Invalid week index:', weekIndex);
   // }
-  if (currentWeekIndex < weeklyRentData.length) {
+  if (currentWeekIndex < weeklyRentData.length - 1) {
+
+    const randomDemandFactor = Math.floor(Math.random() * 11);
+
+    const weeklyScore = parseFloat(data.currentRentPrice) * randomDemandFactor;
+
+
+    
     const updatedWeeklyRentData = [...weeklyRentData];
-    updatedWeeklyRentData[currentWeekIndex] = parseFloat(data.currentRentPrice) || 0;
+    updatedWeeklyRentData[currentWeekIndex] = weeklyScore;
+
+    const updatedWeeklyPrices = [...weeklyPrices];
+    updatedWeeklyPrices[currentWeekIndex] = data.currentRentPrice;
+
+    const updatedDemandFactors = [...demandFactors];
+    updatedDemandFactors[currentWeekIndex] = randomDemandFactor;
+    
+
     setWeeklyRentData(updatedWeeklyRentData);
-    console.log("devebe" ,currentGameData)
+    setWeeklyPrices(updatedWeeklyPrices);
+    setDemandFactors(updatedDemandFactors);
+    setCurrentWeekIndex(currentWeekIndex + 1);
+
+
+    
+    
 
     // Move to the next week
-    setCurrentWeekIndex(currentWeekIndex + 1);
+    
   } else {
     setShowCongratsModal(true);
    
@@ -92,6 +116,14 @@ const [userName, setUserName] = useState('');
   //   setRevenue(calculatedRevenue);
   // };
 
+  // const demandCategories = (score) => {
+  //   if (score >= 8000) return 'VERY HIGH';
+  //   if (score >= 6000) return 'HIGH';
+  //   if (score >= 4000) return 'MEDIUM';
+  //   if (score >= 2000) return 'LOW';
+  //   return 'VERY LOW';
+  // };
+
   const graphData = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, demand: rent }));
 
   // Render the interface
@@ -104,16 +136,14 @@ const [userName, setUserName] = useState('');
           <h1>Data Download</h1>
           <p>You can download all the data related to the selected properties from here.</p>
           <DownloadDataButton filename="SelectedPropertyDetails.txt"/>
-          <h1>{currentGameData.zipCode}</h1>
-          <h3>{currentGameData.propertyType}</h3>
-          <h1>Demand</h1>
+          <h3>your zipcode:{currentGameData.zipCode}</h3>
+          <h3>No of rooms: {currentGameData.numberOfRooms}</h3>
+          <h3>Property Type:{currentGameData.propertyType}</h3>
+          {/* <h1>Demand</h1>
           <h1>ForeCasting</h1>
-          <h1> competitors in the zipcode</h1>
-          
-         
-          <HorizontalTable data={weeklyRentData}/>
+          <h1> competitors in the zipcode</h1> */}
+          <HorizontalTable data={weeklyPrices}/>
         </div>
-
         <div>
           <p>random event</p>
         </div>
@@ -145,7 +175,6 @@ const [userName, setUserName] = useState('');
         </div>
       </div>
     )}
-      
     </div>
   );
 };

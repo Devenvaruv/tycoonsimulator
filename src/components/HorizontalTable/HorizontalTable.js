@@ -10,6 +10,7 @@ const HorizontalTable = ({ data }) => { // Accept data as a prop
     <table className="table-sm">
       <thead>
         <tr>
+          <th className="th-td-sm"> Weeks</th>
           {weeks.map((week, index) => (
             <th key={index} className="th-td-sm">{week}</th>
           ))}
@@ -17,6 +18,7 @@ const HorizontalTable = ({ data }) => { // Accept data as a prop
       </thead>
       <tbody>
         <tr>
+          <th className="th-td-sm"> Rent</th>
           {data.map((income, index) => (
             <td key={index} className="th-td-sm">{income}</td>
           ))}
