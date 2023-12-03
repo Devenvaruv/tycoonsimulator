@@ -18,7 +18,7 @@ function Leaderboard({ players }) {
           {players.map((player, index) => (
             <tr key={player.id}>
               <td>{index + 1}</td>
-              <td>{player.userId}</td>
+              <td>{player.handle}</td>
               <td>{player.date}</td>
               <td>{player.score}</td>
             </tr>
@@ -33,7 +33,7 @@ function GameOutcome() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    fetch('https://gamerecords-405919.wn.r.appspot.com/findAllGameRecord')
+    fetch('https://tycoonsim.wn.r.appspot.com/findAllTycoonRecord')
       .then(response => response.json())
       .then(data => {
         const sortedData = data.sort((a, b) => b.score - a.score);
