@@ -36,12 +36,48 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     onTogglePredatoryPricing(newState);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     if(!userName){
       alert('Please enter a username');
       return;
     }
+    try {
+      const requestBody = {
+        // Replace these with actual property names and values you want to send
+        handle: userName,
+        score: weeklyRentData.reduce((acc , current) => acc + current ,0), // Replace with actual score variable
+        date: new Date().toLocaleString() // Or any other date format as per your backend requirement
+      };
+      console.log("DEEDE" , weeklyRentData)
+      
+      
+  
+      // Perform the POST request
+      const response = await fetch('https://tycoonsim.wn.r.appspot.com/saveTycoonRecord', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        // Include other headers as needed, e.g., authorization
+      },
+      body: JSON.stringify(requestBody)
+    });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Process the response (optional)
+      const responseData = await response.json();
+      console.log('Response from API:', responseData);
+  
+      // Continue with navigation
+      navigate('/game-outcome', { state: { userName } });
+  
+    } catch (error) {
+      console.error('Error in POST request:', error);
+    }
     setShowCongratsModal(false);
+    
     navigate('/game-outcome', { state: { userName } }); // Pass userName in state if needed
   };
 
