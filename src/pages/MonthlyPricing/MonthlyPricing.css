@@ -23,5 +23,10 @@
     margin: auto !important;
   }
 
-  
+  .textcontainer {
+    width: 100%; /* or a fixed width */
+    height: 100px; /* adjust as needed */
+    display: flex !important;
+    background-color: red !important;
+  }
   

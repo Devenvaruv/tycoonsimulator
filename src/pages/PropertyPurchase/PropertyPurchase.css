@@ -67,3 +67,10 @@ button:hover {
   width: auto;
 } */
 
+.textcontainer {
+  width: 50%; /* or a fixed width */
+  height: 50%; /* adjust as needed */
+  /* display: flex !important; */
+ 
+}
+

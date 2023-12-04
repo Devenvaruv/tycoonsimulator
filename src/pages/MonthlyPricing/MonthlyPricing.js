@@ -20,6 +20,7 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
   const [userName, setUserName] = useState('');
   const [demandFactors, setDemandFactors] = useState(Array(12).fill(1));
   const [weeklyPrices, setWeeklyPrices] = useState(Array(12).fill(0));
+  const [randomText, setRandomText] = useState('');
 
 
   const handlePriceChange = (event) => {
@@ -30,6 +31,36 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     onPriceUpdate(monthlyPrice);
     setMonthlyPrice('');
   };
+
+  const randomTexts = [
+    "A renowned tech company is opening an office near your property, boosting local job opportunities.",
+    "A major supermarket chain has announced plans to build a store nearby, improving local amenities.",
+    "A popular celebrity has moved into the neighborhood, increasing the area's prestige.",
+    "A large university is expanding its campus close to your property, potentially increasing rental demand.",
+    "A new public park has been inaugurated nearby, enhancing the neighborhood's appeal.",
+    "Local authorities have announced road improvements in your area, potentially increasing accessibility.",
+    "A new art gallery is opening in the vicinity, contributing to the cultural scene.",
+    "A major sports event is scheduled to take place nearby, temporarily boosting tourism.",
+    "A well-known restaurant chain is opening a new location in your neighborhood.",
+    "A historic building nearby is being converted into a museum, attracting more visitors to the area.",
+    "An upscale shopping mall is being developed close to your property, expected to draw crowds.",
+    "A new high-speed train station is proposed near your location, promising better connectivity.",
+    "A large medical center is being built nearby, likely to increase local employment.",
+    "A significant tech conference is planned in the area, temporarily increasing rental demand.",
+    "A popular film is being shot in your neighborhood, sparking temporary interest.",
+    "An annual music festival has been announced in the area, attracting tourists and music enthusiasts.",
+    "A local school has won prestigious awards, boosting the neighborhood's family appeal.",
+    "A major bridge renovation nearby is causing temporary traffic disruptions.",
+    "A famous hotel chain is constructing a luxury hotel close to your property, potentially boosting property values.",
+    "A new bike lane network is being introduced in the area, promoting greener transportation options."
+  ];
+  
+
+  const getRandomText = () => {
+    const randomIndex = Math.floor(Math.random() * randomTexts.length);
+    return randomTexts[randomIndex];
+  };
+
 
   const handlePredatoryPricingChange = (newState) => {
     //setIsPredatoryPricing(newState);
@@ -103,6 +134,7 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
   //   console.error('Invalid week index:', weekIndex);
   // }
   if (currentWeekIndex < weeklyRentData.length - 1) {
+    setRandomText(getRandomText());
 
     const randomDemandFactor = Math.floor(Math.random() * 11);
 
@@ -180,8 +212,8 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
           <h1> competitors in the zipcode</h1> */}
           <HorizontalTable data={weeklyPrices}/>
         </div>
-        <div>
-          <p>random event</p>
+        <div className="textcontainer">
+          <p className="textcontainer">{getRandomText()}</p>
         </div>
         <div className="chart-container">
           <DemandVsTimeGraph data={graphData}/>
