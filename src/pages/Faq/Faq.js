@@ -36,13 +36,19 @@ function Faq() {
 
     return (
         <div className="faq-container">
+            {/* FAQ Section Header */}
             <h1>Frequently Asked Questions</h1>
+
+            {/* FAQ List */}
             <ul className="faq-list">
                 {faqData.map((faq, index) => (
                     <li key={index} className="faq-item">
+                        {/* FAQ Question Button */}
                         <button className="faq-question" onClick={() => handleFaqClick(index)}>
                             {faq.question}
                         </button>
+
+                        {/* FAQ Answer */}
                         <div className={`faq-answer ${activeIndex === index ? 'active' : ''}`}>
                             {activeIndex === index && <p>{faq.answer}</p>}
                         </div>
