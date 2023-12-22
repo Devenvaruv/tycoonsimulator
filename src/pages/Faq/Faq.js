@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './Faq.css'
 function Faq() {
     // Dummy FAQ data
     const faqData = [
@@ -37,7 +37,7 @@ function Faq() {
     return (
         <div className="faq-container">
             {/* FAQ Section Header */}
-            <h1>Frequently Asked Questions</h1>
+            <h1>How Can We Help You?</h1>
 
             {/* FAQ List */}
             <ul className="faq-list">
@@ -45,6 +45,7 @@ function Faq() {
                     <li key={index} className="faq-item">
                         {/* FAQ Question Button */}
                         <button className="faq-question" onClick={() => handleFaqClick(index)}>
+                       
                             {faq.question}
                         </button>
 

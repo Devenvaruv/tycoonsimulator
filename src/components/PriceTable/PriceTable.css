@@ -1,0 +1,48 @@
+.responsive-price-table-container {
+    width: 100%;
+    margin: auto;
+    overflow-x: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .responsive-price-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    font-size: 0.8em;
+  }
+  
+  .responsive-price-table th, .responsive-price-table td {
+    text-align: left;
+    padding: 0.4em;
+    border-bottom: 1px solid #ddd;
+    background-color: white; /* Base color for all cells */
+  }
+  
+  .responsive-price-table th {
+    background-color: #4CAF50; /* Green background for header */
+    color: white;
+  }
+  
+  /* Updated checker pattern with more contrast */
+  .responsive-price-table tr:nth-child(even) td:nth-child(odd),
+  .responsive-price-table tr:nth-child(odd) td:nth-child(even) {
+    background-color: #e0e0e0; /* A darker gray for better contrast */
+  }
+  
+  .responsive-price-table tr:hover td {
+    background-color: #f1f1f1; /* Slightly darker on hover for better interaction */
+  }
+  
+  @media screen and (max-width: 768px) {
+    .responsive-price-table th, .responsive-price-table td {
+      padding: 0.3em;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .responsive-price-table th, .responsive-price-table td {
+      font-size: 0.7em;
+    }
+  }
+  

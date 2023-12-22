@@ -5,6 +5,7 @@ const PropertySellForm = ({ onSell }) => {
   // State for each input field
   const [currentRentPrice, setCurrentRentPrice] = useState('');
   const [rentOption, setRentOption] = useState('');
+  const [currentWeek, setCurrentWeek] = useState(1);
   const [error, setError] = useState('');
   
 
@@ -26,23 +27,23 @@ const PropertySellForm = ({ onSell }) => {
       setError("Please enter rent between 0 and 10000");
       return;
     }
-
     setError('');
-
     const propertySellData = {
+      week: currentWeek,
       currentRentPrice,
       rentOption,
     };
-
     onSell(propertySellData); // Pass the data back up to the parent component
     setCurrentRentPrice('');
+    setRentOption('');
+    setCurrentWeek(currentWeek + 1); 
   };
 
   return (
     <form onSubmit={handleSubmit}>
       {error && <div className="error-message">{error}</div>}
       <div>
-        <label htmlFor="currentRentPrice">Current Rent Price:</label>
+        <label htmlFor="currentRentPrice">Week: {currentWeek}</label>
         <input
           type="number"
           id="currentRentPrice"
@@ -58,7 +59,6 @@ const PropertySellForm = ({ onSell }) => {
           onChange={(e) => setRentOption(e.target.value)}
         >
           <option value="">Select Rent Option</option>
-         
           <option value="whole">Whole Property</option>
         </select>
       </div>

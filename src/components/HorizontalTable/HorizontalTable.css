@@ -1,8 +1,16 @@
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+  
+}
+
+
 .table-sm {
     width: 50%;
     font-size: 0.8rem;
     margin: auto;
     border-collapse: collapse;
+    
   }
   
   .th-td-sm {

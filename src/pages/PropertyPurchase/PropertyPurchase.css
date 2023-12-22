@@ -15,9 +15,9 @@
   flex-basis: 25%; /* This will assign equal width if all have the same content, adjust as necessary */
   /* If you want them to be flexible based on content, you might consider `flex-grow` or `flex` shorthand */
 }
-.property-purchase-container .map-container{
+/* .property-purchase-container .map-container{
   flex-basis: 50%;
-}
+} */
 
 /* If you have more specific design requirements, like fixed widths or responsive design, you might need to adjust the flex-basis values or use a combination of flex-grow, flex-shrink, and flex-basis. */
 @media (max-width: 768px) {
@@ -28,7 +28,7 @@
   .property-purchase-container .table-container,
   .property-purchase-container .map-container,
   .property-purchase-container .chart-container {
-    flex-basis: auto; /* Let them take the full width in a column layout */
+    flex-basis: 10%; /* Let them take the full width in a column layout */
   }
 }
 
@@ -72,5 +72,18 @@ button:hover {
   height: 50%; /* adjust as needed */
   /* display: flex !important; */
  
+}
+
+.property-purchase-container {
+  padding: 20px 20px 0px;
+  box-sizing: border-box;
+  
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 

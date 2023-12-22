@@ -6,15 +6,15 @@ import HorizontalTable from '../../components/HorizontalTable/HorizontalTable';
 import PropertySellForm from '../../components/PropertySellForm/PropertySellForm';
 import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
 import DemandVsTimeGraph from '../../components/DemandVsTimeGraph/DemandVsTimeGraph';
-import { GameDataProvider } from '../../utils/GameDataContext';
+import PriceTable from '../../components/PriceTable/PriceTable';
 import { GameDataContext } from '../../utils/GameDataContext';
-
+import './MonthlyPricing.css'
 const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) => {
   const [monthlyPrice, setMonthlyPrice] = useState('');
   const [propertyData, setPropertyData] = useState(null);
   const [weeklyRentData, setWeeklyRentData] = useState(Array(12).fill(0));
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
-  const {currentGameData} = useContext(GameDataContext);
+  const { currentGameData } = useContext(GameDataContext);
   const navigate = useNavigate();
   const [showCongratsModal, setShowCongratsModal] = useState(false);
   const [userName, setUserName] = useState('');
@@ -54,7 +54,7 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     "A famous hotel chain is constructing a luxury hotel close to your property, potentially boosting property values.",
     "A new bike lane network is being introduced in the area, promoting greener transportation options."
   ];
-  
+
 
   const getRandomText = () => {
     const randomIndex = Math.floor(Math.random() * randomTexts.length);
@@ -68,7 +68,7 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
   };
 
   const handleModalClose = async () => {
-    if(!userName){
+    if (!userName) {
       alert('Please enter a username');
       return;
     }
@@ -76,43 +76,43 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
       const requestBody = {
         // Replace these with actual property names and values you want to send
         handle: userName,
-        score: weeklyRentData.reduce((acc , current) => acc + current ,0), // Replace with actual score variable
+        score: weeklyRentData.reduce((acc, current) => acc + current, 0), // Replace with actual score variable
         date: new Date().toLocaleString() // Or any other date format as per your backend requirement
       };
-      console.log("DEEDE" , weeklyRentData)
-      
-      
-  
+      //console.log("DEEDE" , weeklyRentData)
+
+
+
       // Perform the POST request
       const response = await fetch('https://tycoonsim.wn.r.appspot.com/saveTycoonRecord', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-        // Include other headers as needed, e.g., authorization
-      },
-      body: JSON.stringify(requestBody)
-    });
-  
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+          // Include other headers as needed, e.g., authorization
+        },
+        body: JSON.stringify(requestBody)
+      });
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       // Process the response (optional)
       const responseData = await response.json();
       console.log('Response from API:', responseData);
-  
+
       // Continue with navigation
       navigate('/game-outcome', { state: { userName } });
-  
+
     } catch (error) {
       console.error('Error in POST request:', error);
     }
     setShowCongratsModal(false);
-    
+
     navigate('/game-outcome', { state: { userName } }); // Pass userName in state if needed
   };
 
-  
+
   const handleFormSubmit = (data) => {
     // const updatedWeeklyRentData = [...weeklyRentData];
     // updatedWeeklyRentData[parseInt(data.rentOption) - 1] = parseFloat(data.currentRentPrice);
@@ -121,58 +121,58 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     // calculateCostAndRevenue(data);
     // console.log(data)
 
-  //   console.log('Form data:', data.currentRentPrice); // Log the raw form data
-  // const weekIndex = parseInt(data.currentRentPrice, 10) - 1; // Always use radix 10 for parseInt
-  // console.log('Parsed week index:', weekIndex); // Check the parsed index
-  // const updatedWeeklyRentData = [...weeklyRentData];
-  
-  // // Check if weekIndex is a number and within the expected range
-  // if (!isNaN(weekIndex) && weekIndex >= 0 && weekIndex < updatedWeeklyRentData.length) {
-  //   updatedWeeklyRentData[weekIndex] = parseFloat(data.currentRentPrice);
-  //   setWeeklyRentData(updatedWeeklyRentData);
-  // } else {
-  //   console.error('Invalid week index:', weekIndex);
-  // }
-  if (currentWeekIndex < weeklyRentData.length - 1) {
-    setRandomText(getRandomText());
+    //   console.log('Form data:', data.currentRentPrice); // Log the raw form data
+    // const weekIndex = parseInt(data.currentRentPrice, 10) - 1; // Always use radix 10 for parseInt
+    // console.log('Parsed week index:', weekIndex); // Check the parsed index
+    // const updatedWeeklyRentData = [...weeklyRentData];
 
-    const randomDemandFactor = Math.floor(Math.random() * 11);
+    // // Check if weekIndex is a number and within the expected range
+    // if (!isNaN(weekIndex) && weekIndex >= 0 && weekIndex < updatedWeeklyRentData.length) {
+    //   updatedWeeklyRentData[weekIndex] = parseFloat(data.currentRentPrice);
+    //   setWeeklyRentData(updatedWeeklyRentData);
+    // } else {
+    //   console.error('Invalid week index:', weekIndex);
+    // }
+    if (currentWeekIndex < weeklyRentData.length - 1) {
+      setRandomText(getRandomText());
 
-    const weeklyScore = parseFloat(data.currentRentPrice) * randomDemandFactor;
+      const randomDemandFactor = Math.floor(Math.random() * 11);
 
-
-    
-    const updatedWeeklyRentData = [...weeklyRentData];
-    updatedWeeklyRentData[currentWeekIndex] = weeklyScore;
-
-    const updatedWeeklyPrices = [...weeklyPrices];
-    updatedWeeklyPrices[currentWeekIndex] = data.currentRentPrice;
-
-    const updatedDemandFactors = [...demandFactors];
-    updatedDemandFactors[currentWeekIndex] = randomDemandFactor;
-    
-
-    setWeeklyRentData(updatedWeeklyRentData);
-    setWeeklyPrices(updatedWeeklyPrices);
-    setDemandFactors(updatedDemandFactors);
-    setCurrentWeekIndex(currentWeekIndex + 1);
+      const weeklyScore = parseFloat(data.currentRentPrice) * randomDemandFactor;
 
 
-    
-    
 
-    // Move to the next week
-    
-  } else {
-    setShowCongratsModal(true);
-   
-    // Handle the case when all weeks have been filled
-    console.log('All weeks have been filled');
-    
-    // Optionally reset or do something else
-  }
+      const updatedWeeklyRentData = [...weeklyRentData];
+      updatedWeeklyRentData[currentWeekIndex] = weeklyScore;
 
-  setPropertyData(data); // Additional logic...
+      const updatedWeeklyPrices = [...weeklyPrices];
+      updatedWeeklyPrices[currentWeekIndex] = data.currentRentPrice;
+
+      const updatedDemandFactors = [...demandFactors];
+      updatedDemandFactors[currentWeekIndex] = randomDemandFactor;
+
+
+      setWeeklyRentData(updatedWeeklyRentData);
+      setWeeklyPrices(updatedWeeklyPrices);
+      setDemandFactors(updatedDemandFactors);
+      setCurrentWeekIndex(currentWeekIndex + 1);
+
+
+
+
+
+      // Move to the next week
+
+    } else {
+      setShowCongratsModal(true);
+
+      // Handle the case when all weeks have been filled
+      console.log('All weeks have been filled');
+
+      // Optionally reset or do something else
+    }
+
+    setPropertyData(data); // Additional logic...
   };
 
   // const calculateCostAndRevenue = (data) => {
@@ -194,55 +194,50 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
 
   const graphData = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, demand: rent }));
 
-  // Render the interface
-   return (
-    
-    <div className="property-purchase-container">
-      
-      {!showCongratsModal &&(<div className="top-content">
-        <div className="table-container">
-          <h1>Data Download</h1>
-          <p>You can download all the data related to the selected properties from here.</p>
-          <DownloadDataButton filename="SelectedPropertyDetails.txt"/>
-          <h3>your zipcode:{currentGameData.zipCode}</h3>
+  return (
+    <div className="rent-determination-container">
+
+      {!showCongratsModal && (<div className="pre-congrats-content">
+        <div className="week-container">
+          <h1>Comprehensive Property Insights</h1>
+          <p>Explore and download our comprehensive dataset, which offers a historical analysis of financial performance for properties within the {currentGameData.zipCode}. This rich dataset includes detailed revenue and cost combinations for various types of properties, from residential to commercial, providing a granular look at the financial landscape of real estate in this area. Gain a competitive edge by leveraging our curated data to inform your strategic decisions.</p>
+          <DownloadDataButton filename="SelectedPropertyDetails.txt" />
+          <h3>Zipcode:{currentGameData.zipCode}</h3>
           <h3>No of rooms: {currentGameData.numberOfRooms}</h3>
           <h3>Property Type:{currentGameData.propertyType}</h3>
-          {/* <h1>Demand</h1>
-          <h1>ForeCasting</h1>
-          <h1> competitors in the zipcode</h1> */}
-          <HorizontalTable data={weeklyPrices}/>
+          <HorizontalTable data={weeklyPrices} />
         </div>
-        <div className="textcontainer">
-          <p className="textcontainer">{getRandomText()}</p>
+        <div className="text-container">
+          <p className="random-text-container">{getRandomText()}</p>
+          <img src='./PlaceHolder.png' alt='Temp' width="250" height="200" />
+          <PriceTable />
+          
         </div>
-        <div className="chart-container">
-          <DemandVsTimeGraph data={graphData}/>
-          <div className="bottom-content">
-        <div  className="form-container">
-          <PropertySellForm onSell={handleFormSubmit}/>
-          <p>{}</p>
-        </div>
-      </div>
+        <div className="rng-container">
+          <DemandVsTimeGraph data={graphData} />
+          <div className="rent-setter-container">
+            <PropertySellForm onSell={handleFormSubmit} />
+            <p>{ }</p>
+          </div>
         </div>
       </div>)}
 
-      
-    {/* Modal for congratulating the user */}
-    {showCongratsModal && (
-      <div className="modal">
-        <div className="modal-content">
-          <h2>Congratulations!</h2>
-          <p>Please enter your name to see the results.</p>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
-          <button onClick={handleModalClose}>Continue</button>
+      {/* Modal for congratulating the user */}
+      {showCongratsModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Congratulations!</h2>
+            <p>Please enter your name to see the results.</p>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+            <button onClick={handleModalClose}>Continue</button>
+          </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 };
