@@ -4,32 +4,41 @@ import { useNavigate } from 'react-router-dom';
 
 import HorizontalTable from '../../components/HorizontalTable/HorizontalTable';
 import PropertySellForm from '../../components/PropertySellForm/PropertySellForm';
-import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
+
 import DemandVsTimeGraph from '../../components/DemandVsTimeGraph/DemandVsTimeGraph';
+import BellGraph from '../../components/BellGraph/BellGraph';
 import PriceTable from '../../components/PriceTable/PriceTable';
 import { GameDataContext } from '../../utils/GameDataContext';
 import './MonthlyPricing.css'
-const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) => {
-  const [monthlyPrice, setMonthlyPrice] = useState('');
-  const [propertyData, setPropertyData] = useState(null);
-  const [weeklyRentData, setWeeklyRentData] = useState(Array(12).fill(0));
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+import DisplayCard from '../../components/DisplayCard/DisplayCard';
+
+const MonthlyPricing = () => {
   const { currentGameData } = useContext(GameDataContext);
   const navigate = useNavigate();
   const [showCongratsModal, setShowCongratsModal] = useState(false);
+  const [doDisplayCard, setDoDisplayCard] = useState(false);
   const [userName, setUserName] = useState('');
-  const [demandFactors, setDemandFactors] = useState(Array(12).fill(1));
-  const [weeklyPrices, setWeeklyPrices] = useState(Array(12).fill(0));
-  const [randomText, setRandomText] = useState('');
+  const [competatorRent, setCompetatorRent] = useState();
 
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
-  const handlePriceChange = (event) => {
-    setMonthlyPrice(event.target.value);
+  const [weeklyRentData, setWeeklyRentData] = useState(Array(16).fill(0));
+  const jsonData = require('./df.json'); // Load the data from the local JSON file
+
+  const toggle = () => {
+    setDoDisplayCard(!doDisplayCard);
   };
 
-  const handlePriceSubmit = () => {
-    onPriceUpdate(monthlyPrice);
-    setMonthlyPrice('');
+  const findMatchingRow = (data, filters) => {
+    return data.find(row => {
+      return Object.keys(filters).every(key => row[key] === filters[key]);
+    });
+  }
+
+  const getRandomNumberAround = (center, deviation) => {
+    const min = center - deviation;
+    const max = center + deviation;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   const randomTexts = [
@@ -55,16 +64,9 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     "A new bike lane network is being introduced in the area, promoting greener transportation options."
   ];
 
-
   const getRandomText = () => {
     const randomIndex = Math.floor(Math.random() * randomTexts.length);
     return randomTexts[randomIndex];
-  };
-
-
-  const handlePredatoryPricingChange = (newState) => {
-    //setIsPredatoryPricing(newState);
-    onTogglePredatoryPricing(newState);
   };
 
   const handleModalClose = async () => {
@@ -79,9 +81,6 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
         score: weeklyRentData.reduce((acc, current) => acc + current, 0), // Replace with actual score variable
         date: new Date().toLocaleString() // Or any other date format as per your backend requirement
       };
-      //console.log("DEEDE" , weeklyRentData)
-
-
 
       // Perform the POST request
       const response = await fetch('https://tycoonsim.wn.r.appspot.com/saveTycoonRecord', {
@@ -112,115 +111,117 @@ const MonthlyPricing = ({ onPriceUpdate, onTogglePredatoryPricing, gameData }) =
     navigate('/game-outcome', { state: { userName } }); // Pass userName in state if needed
   };
 
-
   const handleFormSubmit = (data) => {
-    // const updatedWeeklyRentData = [...weeklyRentData];
-    // updatedWeeklyRentData[parseInt(data.rentOption) - 1] = parseFloat(data.currentRentPrice);
-    // setWeeklyRentData(updatedWeeklyRentData);
-    // setPropertyData(data); // You can use this data to display in PropertiesTable or elsewhere
-    // calculateCostAndRevenue(data);
-    // console.log(data)
 
-    //   console.log('Form data:', data.currentRentPrice); // Log the raw form data
-    // const weekIndex = parseInt(data.currentRentPrice, 10) - 1; // Always use radix 10 for parseInt
-    // console.log('Parsed week index:', weekIndex); // Check the parsed index
-    // const updatedWeeklyRentData = [...weeklyRentData];
+    const filters = {
+      zipcode: parseInt(currentGameData.zipCode),
+      bathrooms: parseInt(currentGameData.bathrooms),
+      bedrooms: parseInt(currentGameData.numberOfRooms),
+      accommodates: parseInt(currentGameData.accommodation),
+      property_type: "Entire home/apt",
+      week: parseInt(currentWeekIndex + 1),
+    };
 
-    // // Check if weekIndex is a number and within the expected range
-    // if (!isNaN(weekIndex) && weekIndex >= 0 && weekIndex < updatedWeeklyRentData.length) {
-    //   updatedWeeklyRentData[weekIndex] = parseFloat(data.currentRentPrice);
-    //   setWeeklyRentData(updatedWeeklyRentData);
-    // } else {
-    //   console.error('Invalid week index:', weekIndex);
-    // }
-    if (currentWeekIndex < weeklyRentData.length - 1) {
-      setRandomText(getRandomText());
+    const matchingRow = findMatchingRow(jsonData, filters);
 
-      const randomDemandFactor = Math.floor(Math.random() * 11);
-
-      const weeklyScore = parseFloat(data.currentRentPrice) * randomDemandFactor;
-
-
-
-      const updatedWeeklyRentData = [...weeklyRentData];
-      updatedWeeklyRentData[currentWeekIndex] = weeklyScore;
-
-      const updatedWeeklyPrices = [...weeklyPrices];
-      updatedWeeklyPrices[currentWeekIndex] = data.currentRentPrice;
-
-      const updatedDemandFactors = [...demandFactors];
-      updatedDemandFactors[currentWeekIndex] = randomDemandFactor;
-
-
-      setWeeklyRentData(updatedWeeklyRentData);
-      setWeeklyPrices(updatedWeeklyPrices);
-      setDemandFactors(updatedDemandFactors);
-      setCurrentWeekIndex(currentWeekIndex + 1);
-
-
-
-
-
-      // Move to the next week
-
+    if (matchingRow) {
+      console.log("Matching row found:", matchingRow.simulated_occupancy);
+      setCompetatorRent(
+        getRandomNumberAround(
+          10 * matchingRow.simulated_occupancy,
+          10 *
+          (matchingRow.accommodates /
+            ((matchingRow.bathrooms + matchingRow.bedrooms) / 2))
+        )
+      );
     } else {
-      setShowCongratsModal(true);
-
-      // Handle the case when all weeks have been filled
-      console.log('All weeks have been filled');
-
-      // Optionally reset or do something else
+      setCompetatorRent(50)
+      console.log("No matching row found.");
     }
 
-    setPropertyData(data); // Additional logic...
+    setDoDisplayCard(!doDisplayCard);
+    
+
+    if (currentWeekIndex < 17) {
+
+      const updatedWeeklyRentData = [...weeklyRentData];
+      updatedWeeklyRentData[currentWeekIndex] = parseFloat(data.currentRentPrice);
+
+      setWeeklyRentData(updatedWeeklyRentData);
+
+      setCurrentWeekIndex(currentWeekIndex + 1);
+      
+    } else {
+      setShowCongratsModal(false);
+      // Handle the case when all weeks have been filled
+      console.log('All weeks have been filled');
+    }
+
   };
 
-  // const calculateCostAndRevenue = (data) => {
-  //   // Implement your logic to calculate cost and revenue based on propertyData
-  //   // For example, let's say cost is $1000 per room and revenue is $1500 per room
-  //   const calculatedCost = data.numberOfRooms * 1000;
-  //   const calculatedRevenue = revenue - calculatedCost;
-  //   setCost(calculatedCost);
-  //   setRevenue(calculatedRevenue);
-  // };
-
-  // const demandCategories = (score) => {
-  //   if (score >= 8000) return 'VERY HIGH';
-  //   if (score >= 6000) return 'HIGH';
-  //   if (score >= 4000) return 'MEDIUM';
-  //   if (score >= 2000) return 'LOW';
-  //   return 'VERY LOW';
-  // };
-
-  const graphData = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, demand: rent }));
+  const graphData2 = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, you: rent, competitor: rent !== 0 ? competatorRent : rent }));
 
   return (
     <div className="rent-determination-container">
+      {!showCongratsModal && (
+        <div className="pre-congrats-content">
+          {doDisplayCard && (
+            <DisplayCard
+              title={currentWeekIndex}
+              imageUrl="https://via.placeholder.com/300"
+              currentWealth={weeklyRentData[currentWeekIndex - 1] * 7}
+              fixedCost={100}
+              miscCost={50}
+              onContinue={toggle}
+            />
+          )}
+          <div className="week-container">
+            <h1>Comprehensive Property Insights</h1>
+            <p>
+              Explore and download our comprehensive dataset, which offers a
+              historical analysis of financial performance for properties within
+              the {currentGameData.zipCode}. This rich dataset includes detailed
+              revenue and cost combinations for various types of properties,
+              from residential to commercial, providing a granular look at the
+              financial landscape of real estate in this area. Gain a
+              competitive edge by leveraging our curated data to inform your
+              strategic decisions.
+            </p>
+            <h3>Zipcode: {currentGameData.zipCode}</h3>
+            <h3>No of Rooms: {currentGameData.numberOfRooms}</h3>
+            <h3>No of Bathrooms: {currentGameData.numberOfRooms}</h3>
+            <h3>No of Accommodates: {currentGameData.accommodation}</h3>
+            <h3>Property Type: {currentGameData.propertyType}</h3>
+            <HorizontalTable data={weeklyRentData} />
+          </div>
 
-      {!showCongratsModal && (<div className="pre-congrats-content">
-        <div className="week-container">
-          <h1>Comprehensive Property Insights</h1>
-          <p>Explore and download our comprehensive dataset, which offers a historical analysis of financial performance for properties within the {currentGameData.zipCode}. This rich dataset includes detailed revenue and cost combinations for various types of properties, from residential to commercial, providing a granular look at the financial landscape of real estate in this area. Gain a competitive edge by leveraging our curated data to inform your strategic decisions.</p>
-          <DownloadDataButton filename="SelectedPropertyDetails.txt" />
-          <h3>Zipcode:{currentGameData.zipCode}</h3>
-          <h3>No of rooms: {currentGameData.numberOfRooms}</h3>
-          <h3>Property Type:{currentGameData.propertyType}</h3>
-          <HorizontalTable data={weeklyPrices} />
-        </div>
-        <div className="text-container">
-          <p className="random-text-container">{getRandomText()}</p>
-          <img src='./PlaceHolder.png' alt='Temp' width="250" height="200" />
-          <PriceTable />
-          
-        </div>
-        <div className="rng-container">
-          <DemandVsTimeGraph data={graphData} />
-          <div className="rent-setter-container">
-            <PropertySellForm onSell={handleFormSubmit} />
-            <p>{ }</p>
+          <div className="text-container">
+            <p
+              className="random-text-container"
+              style={{ paddingBottom: "30px" }}
+            >
+              {getRandomText()}
+            </p>
+            <div className="img-container">
+              <img
+                src="./PlaceHolder.png"
+                width={250}
+                height={200}
+                alt="Temp"
+              />
+            </div>
+            <BellGraph compRent={competatorRent} fluctation={currentGameData.accommodates}/>
+            <PriceTable />
+          </div>
+          <div className="rng-container">
+            <DemandVsTimeGraph data={graphData2} />
+            <div className="rent-setter-container">
+              <PropertySellForm onSell={handleFormSubmit} />
+              <p>{ }</p>
+            </div>
           </div>
         </div>
-      </div>)}
+      )}
 
       {/* Modal for congratulating the user */}
       {showCongratsModal && (
