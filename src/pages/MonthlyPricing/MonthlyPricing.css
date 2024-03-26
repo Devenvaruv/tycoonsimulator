@@ -43,11 +43,21 @@
   flex: 0 0 30%; /* Adjust the percentage as needed */
   min-width: 0;
   padding: 20px;
+  
 }
 
 .rng-container {
   flex: 0 0 35%; /* Adjust the percentage as needed */
   min-width: 0;
   padding: 10px;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+ 
+  padding-bottom: 30px;
+  
 }
 

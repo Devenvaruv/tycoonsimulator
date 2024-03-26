@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './Faq.css'
+
 function Faq() {
-    // Dummy FAQ data
+
     const faqData = [
         {
             question: 'How do I update my profile?',
@@ -25,7 +26,7 @@ function Faq() {
         }
     ];
 
-    // State to keep track of the opened FAQ item
+    
     const [activeIndex, setActiveIndex] = useState(null);
 
     // Function to handle FAQ item click
@@ -43,9 +44,9 @@ function Faq() {
             <ul className="faq-list">
                 {faqData.map((faq, index) => (
                     <li key={index} className="faq-item">
+                        
                         {/* FAQ Question Button */}
                         <button className="faq-question" onClick={() => handleFaqClick(index)}>
-                       
                             {faq.question}
                         </button>
 

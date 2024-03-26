@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Leaderboard.css'; // Assuming you create a CSS file for styles
+import './Leaderboard.css';
 
 function Leaderboard({ players }) {
   return (
@@ -49,7 +49,6 @@ function GameOutcome() {
 
   return (
     <div>
-      
       <Leaderboard players={players} />
     </div>
   );

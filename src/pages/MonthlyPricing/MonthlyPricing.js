@@ -12,6 +12,7 @@ import { GameDataContext } from '../../utils/GameDataContext';
 import './MonthlyPricing.css'
 import DisplayCard from '../../components/DisplayCard/DisplayCard';
 
+
 const MonthlyPricing = () => {
   const { currentGameData } = useContext(GameDataContext);
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const MonthlyPricing = () => {
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
   const [weeklyRentData, setWeeklyRentData] = useState(Array(16).fill(0));
+  const [weeklyDemandData, setWeeklyDemandData] = useState(Array(16).fill(0));
   const jsonData = require('./df.json'); // Load the data from the local JSON file
 
   const toggle = () => {
@@ -123,7 +125,10 @@ const MonthlyPricing = () => {
     };
 
     const matchingRow = findMatchingRow(jsonData, filters);
-
+    if(matchingRow.simulated_occupancy === null || matchingRow.simulated_occupancy === undefined || matchingRow.simulated_occupancy === isNaN) {
+      matchingRow.simulated_occupancy = 5;
+      
+    }
     if (matchingRow) {
       console.log("Matching row found:", matchingRow.simulated_occupancy);
       setCompetatorRent(
@@ -147,7 +152,11 @@ const MonthlyPricing = () => {
       const updatedWeeklyRentData = [...weeklyRentData];
       updatedWeeklyRentData[currentWeekIndex] = parseFloat(data.currentRentPrice);
 
+      const updatedWeeklyDemandData = [...weeklyDemandData];
+      updatedWeeklyDemandData[currentWeekIndex] = matchingRow.simulated_occupancy
+
       setWeeklyRentData(updatedWeeklyRentData);
+      setWeeklyDemandData(updatedWeeklyDemandData);
 
       setCurrentWeekIndex(currentWeekIndex + 1);
       
@@ -159,7 +168,7 @@ const MonthlyPricing = () => {
 
   };
 
-  const graphData2 = weeklyRentData.map((rent, index) => ({ time: `Week ${index + 1}`, you: rent, competitor: rent !== 0 ? competatorRent : rent }));
+  const graphData2 = weeklyDemandData.map((rent, index) => ({ time: `Week ${index + 1}`, demand: rent}));
 
   return (
     <div className="rent-determination-container">

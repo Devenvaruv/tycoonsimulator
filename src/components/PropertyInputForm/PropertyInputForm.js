@@ -9,6 +9,7 @@ const PropertyInputForm = ({ onSubmit }) => {
   const [numberOfRooms, setNumberOfRooms] = useState('');
   const [bathrooms, setBathrooms] = useState('');
   const [propertyType, setPropertyType] = useState('');
+  const [accommodation, setAccommodation] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -16,23 +17,27 @@ const PropertyInputForm = ({ onSubmit }) => {
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevents the default form submit action (page reload)
 
-    if (parseInt(bathrooms) >= parseInt(numberOfRooms)) {
+    if (parseInt(bathrooms) > parseInt(numberOfRooms)) {
       setError('Invalid number of bathrooms or rooms');
       return; // Stop the form submission
     }
 
-    if ((parseInt(bathrooms) >= 10) || (parseInt(bathrooms) <= 0 ) || (!bathrooms)) {
-      setError('bathrooms must be between 0 and 10')
+    if ((parseInt(bathrooms) > 12) || (parseInt(bathrooms) <= 0 ) || (!bathrooms)) {
+      setError('Bathrooms must be between 0 and 12')
       return;
     }
 
-    if ((parseInt(numberOfRooms) >= 10) || (parseInt(numberOfRooms) <= 0 ) || (!numberOfRooms)) {
-      setError('room must be between 0 and 10')
+    if ((parseInt(numberOfRooms) > 14) || (parseInt(numberOfRooms) <= 0 ) || (!numberOfRooms)) {
+      setError('Room must be between 0 and 14')
       return;
     }
-
-    if (!isTexasZipcode(zipCode)) {
-      setError('Zipcode must be valid and from Texas');
+    if (zipCode !== '78701' && zipCode !== '78705' && zipCode !== '78746') {
+      setError('Zipcode must be either 78746, 78701, or 78705.');
+      return; // Stop the form submission
+    }
+    if ((parseInt(accommodation) >= 17) || (parseInt(accommodation) <= 0 ) || (!accommodation)) {
+      setError('Accommodation must be between 0 and 16');
+      
       return; // Stop the form submission
     }
 
@@ -51,17 +56,12 @@ const PropertyInputForm = ({ onSubmit }) => {
       numberOfRooms,
       bathrooms,
       propertyType,
+      accommodation
     };
     onSubmit(propertyData); // Pass the data back up to the parent component
 
     navigate('/monthly-pricing');
   };
-
-  function isTexasZipcode(zipCode) {
-    const regex = /^(75[0-9]{3}|76[0-9]{3}|77[0-9]{3}|78[0-9]{3}|79[0-8][0-9]{2}|799[0-9]{2}|8851[0-9])$/;
-    return regex.test(zipCode);
-  }
-  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -69,7 +69,7 @@ const PropertyInputForm = ({ onSubmit }) => {
       <div>
         <label htmlFor="zipCode">Zip Code:</label>
         <input
-          type="text"
+          type="number"
           id="zipCode"
           value={zipCode}
           onChange={(e) => setZipCode(e.target.value)}
@@ -91,6 +91,15 @@ const PropertyInputForm = ({ onSubmit }) => {
           id="bathrooms"
           value={bathrooms}
           onChange={(e) => setBathrooms(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="accommodation">Accommodates:</label>
+        <input
+          type="number"
+          id="accommodation"
+          value={accommodation}
+          onChange={(e) => setAccommodation(e.target.value)}
         />
       </div>
       <div>

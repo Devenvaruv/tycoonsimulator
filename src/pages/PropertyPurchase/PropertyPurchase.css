@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Montserrat-Black';
+  src: local('Montserrat-Black'), url('../../fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+body {
+  margin: 0;
+  font-family: 'Montserrat-Black',sans-serif;
+}
+
 .property-purchase-container {
   font-family: Arial, sans-serif; /* or any other font-family */
 }
@@ -87,3 +98,20 @@ button:hover {
   align-items: center;
 }
 
+
+.image-container {
+  width: 500px; /* or any specific width */
+  height: 350px; /* or any specific height */
+  overflow: hidden;
+}
+
+.image-container img {
+  display: block; /* remove extra space below the image */
+  width: auto; /* maintain original image width */
+  height: auto; /* maintain original image height */
+}
+
+.graphs-container {
+ 
+  background-color: #f9f9f9;
+}

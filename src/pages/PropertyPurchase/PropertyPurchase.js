@@ -1,50 +1,66 @@
-import React, { useState, useContext } from 'react';
-import RevenueCostChart from '../../components/RevenueCostChart/RevenueCostChart';
+import React, { useContext } from 'react';
 import PropertyInputForm from '../../components/PropertyInputForm/PropertyInputForm';
-import DownloadDataButton from '../../components/DownloadDataButton/DownloadDataButton';
-
+import { GameDataContext } from '../../utils/GameDataContext';
 import './PropertyPurchase.css';
 
-import { GameDataContext } from '../../utils/GameDataContext';
-
-
-
 const PropertyPurchase = () => {
-  const [revenue, setRevenue] = useState(10000);
-  const [cost, setCost] = useState(0);
-  const [propertyData, setPropertyData] = useState(null);
   const { gameStart } = useContext(GameDataContext);
 
   const handleFormSubmit = (data) => {
-    setPropertyData(data); // You can use this data to display in PropertiesTable or elsewhere
-    calculateCostAndRevenue(data);
     gameStart(data);
   };
-  const calculateCostAndRevenue = (data) => {
-    // Implement your logic to calculate cost and revenue based on propertyData
-    // For example, let's say cost is $1000 per room and revenue is $1500 per room
-    const calculatedCost = data.numberOfRooms * 1000;
-    const calculatedRevenue = revenue - calculatedCost;
-    setCost(calculatedCost);
-    setRevenue(calculatedRevenue);
-  };
-
+  
   return (
     <div className="property-purchase-container">
       <div className="top-content">
         <div className="table-container">
           <h1>In-Depth Property Financials Analysis</h1>
-          <p>Access our tailored dataset for insights into property values and market trends. Customize your analysis by specifying room count, bathroom number, and property type to uncover market desirability, investment potential, and strategic planning opportunities.</p>
-          <DownloadDataButton filename="SelectedPropertyDetails.txt" />
-          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="150" height="150" />
-          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="150" height="150" />
+          <p>
+            Access our tailored dataset for insights into property values and
+            market trends. Customize your analysis by specifying room count,
+            bathroom number, and property type to uncover market desirability,
+            investment potential, and strategic planning opportunities.
+          </p>
+          <a href={"/DataAustin.xlsx"} download={"DataAustin.xlsx"}>
+            <button>
+              {"Download Resource"}
+            </button>
+          </a>
+          <div style={{ padding: '10px', paddingTop: '20px' }}>
+            <img
+              src="./GraphZvsRW.webp"
+              alt="Map of Austin"
+              width="250"
+              height="200"
+              style={{ border: '1px solid #c7c7c7', padding: '10px' }}
+            />
+          </div>
         </div>
         <div className="map-container">
-          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300" />
-          <img src='https://i.stack.imgur.com/wciGE.png' alt='Map of Austin' width="300" height="300" />
+          <iframe title='esri'
+            width={500}
+            height={400}
+            src="https://www.arcgis.com/apps/instant/basic/index.html?appid=c4803853fecc4fd3a23f4224bbf096f3"
+          >
+          </iframe>
+          <div className="graphs-container">
+            <img
+              src="./Graph2.png"
+              alt="Map of Austin"
+              width="230"
+              height="200"
+              style={{ border: '1px solid #c7c7c7', padding: '10px' }}
+            />
+            <img
+              src="./Graph3.png"
+              alt="Map of Austin"
+              width="230"
+              height="200"
+              style={{ border: '1px solid #c7c7c7', padding: '10px' }}
+            />
+          </div>
         </div>
         <div className="chart-container">
-          <RevenueCostChart revenue={revenue} cost={cost} />
           <div className="bottom-content">
             <div className="form-container">
               <PropertyInputForm onSubmit={handleFormSubmit} />

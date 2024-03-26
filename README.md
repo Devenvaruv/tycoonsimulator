@@ -34,4 +34,3 @@ For more information, questions, or feedback, please contact [project maintainer
 
 ---
 
-> This README provides a general overview of the Austin Real Estate Simulator project. For detailed documentation, please refer to the accompanying files in the repository.

@@ -23,8 +23,8 @@ const PropertySellForm = ({ onSell }) => {
       return;
     }
 
-    if ((currentRentPrice < 1) || (currentRentPrice > 10000)){
-      setError("Please enter rent between 0 and 10000");
+    if ((currentRentPrice < 1) || (currentRentPrice > 19286)){
+      setError("Please enter rent between 0 and 19286");
       return;
     }
     setError('');
@@ -43,7 +43,7 @@ const PropertySellForm = ({ onSell }) => {
     <form onSubmit={handleSubmit}>
       {error && <div className="error-message">{error}</div>}
       <div>
-        <label htmlFor="currentRentPrice">Week: {currentWeek}</label>
+        <label htmlFor="currentRentPrice">Weekly Night Rental Rate For Week: {currentWeek}</label>
         <input
           type="number"
           id="currentRentPrice"
@@ -62,7 +62,7 @@ const PropertySellForm = ({ onSell }) => {
           <option value="whole">Whole Property</option>
         </select>
       </div>
-      <button type="submit">Rent Property</button>
+      <button type="submit">Move Next Week</button>
     </form>
   );
 };

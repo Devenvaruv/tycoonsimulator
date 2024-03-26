@@ -9,6 +9,7 @@ export const GameDataProvider = ({ children }) => {
     numberOfRooms: '',
     bathrooms: '',
     propertyType: '',
+    accommodation: ''
   });
 
   // This function updates the current game data

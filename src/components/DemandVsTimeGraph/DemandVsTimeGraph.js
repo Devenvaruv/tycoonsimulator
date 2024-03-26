@@ -1,12 +1,11 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-
 const demandLevels = {
-  100000: 'HIGHEST',
-  75000: 'HIGH',
-  50000: 'MEDIUM',
-  25000: 'LOW',
+  100: 'HIGHEST',
+  75: 'HIGH',
+  50: 'MEDIUM',
+  25: 'LOW',
   0: 'LOWEST'
 };
 
@@ -21,9 +20,8 @@ const CustomYAxisTick = ({ y, payload }) => {
   );
 };
 
-const DemandVsTimeGraph = ({ data }) => { // Accept data as a prop
-  // The data prop will be used directly in the LineChart component
-  const tickValues = [0, 25000, 50000, 75000, 100000];
+const DemandVsTimeGraph = ({ data }) => {
+  const tickValues = [0, 25, 50, 75, 100];
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -41,7 +39,8 @@ const DemandVsTimeGraph = ({ data }) => { // Accept data as a prop
         <YAxis tick={<CustomYAxisTick />} ticks={tickValues} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="demand" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="demand" stroke="#63D471" activeDot={{ r: 8 }} />
+       
       </LineChart>
     </ResponsiveContainer>
   );
