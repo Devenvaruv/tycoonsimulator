@@ -20,11 +20,12 @@ const MonthlyPricing = () => {
   const [doDisplayCard, setDoDisplayCard] = useState(false);
   const [userName, setUserName] = useState('');
   const [competatorRent, setCompetatorRent] = useState();
-
+  const [thisWeekDeviation , setThisWeekDeviation] = useState(1);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
   const [weeklyRentData, setWeeklyRentData] = useState(Array(16).fill(0));
   const [weeklyDemandData, setWeeklyDemandData] = useState(Array(16).fill(0));
+  const [weeklyPercentageLossData, setWeeklyPercentageLossData] = useState(Array(16).fill(0));
   const jsonData = require('./df.json'); // Load the data from the local JSON file
 
   const toggle = () => {
@@ -36,6 +37,7 @@ const MonthlyPricing = () => {
       return Object.keys(filters).every(key => row[key] === filters[key]);
     });
   }
+  
 
   const getRandomNumberAround = (center, deviation) => {
     const min = center - deviation;
@@ -114,7 +116,7 @@ const MonthlyPricing = () => {
   };
 
   const handleFormSubmit = (data) => {
-
+    
     const filters = {
       zipcode: parseInt(currentGameData.zipCode),
       bathrooms: parseInt(currentGameData.bathrooms),
@@ -125,12 +127,8 @@ const MonthlyPricing = () => {
     };
 
     const matchingRow = findMatchingRow(jsonData, filters);
-    if(matchingRow.simulated_occupancy === null || matchingRow.simulated_occupancy === undefined || matchingRow.simulated_occupancy === isNaN) {
-      matchingRow.simulated_occupancy = 5;
-      
-    }
+    
     if (matchingRow) {
-      console.log("Matching row found:", matchingRow.simulated_occupancy);
       setCompetatorRent(
         getRandomNumberAround(
           10 * matchingRow.simulated_occupancy,
@@ -144,22 +142,32 @@ const MonthlyPricing = () => {
       console.log("No matching row found.");
     }
 
+    setThisWeekDeviation(filters.accommodates / ((filters.bathrooms + filters.bedrooms) / 2));
+    const currentWeekSimulatedOccupancy = ((matchingRow ? matchingRow.simulated_occupancy : 5) * 10);
+    const competatorRentRandom = getRandomNumberAround(currentWeekSimulatedOccupancy , (thisWeekDeviation * 10))
     setDoDisplayCard(!doDisplayCard);
-    
+
+
+    const currentWeekWinner = data.currentRentPrice < competatorRentRandom ? true : false;
 
     if (currentWeekIndex < 17) {
 
       const updatedWeeklyRentData = [...weeklyRentData];
-      updatedWeeklyRentData[currentWeekIndex] = parseFloat(data.currentRentPrice);
+
+      updatedWeeklyRentData[currentWeekIndex] =currentWeekWinner? parseFloat(data.currentRentPrice) : 0;
 
       const updatedWeeklyDemandData = [...weeklyDemandData];
-      updatedWeeklyDemandData[currentWeekIndex] = matchingRow.simulated_occupancy
+      updatedWeeklyDemandData[currentWeekIndex] = matchingRow ? matchingRow.simulated_occupancy : 5;
 
+      const updatedWeeklyPercentageLossData = [...weeklyPercentageLossData];
+      updatedWeeklyPercentageLossData[currentWeekIndex] = currentWeekWinner ? +(((competatorRentRandom- data.currentRentPrice)/competatorRentRandom) *100).toFixed(1): 100;
+
+      setWeeklyPercentageLossData(updatedWeeklyPercentageLossData);
       setWeeklyRentData(updatedWeeklyRentData);
       setWeeklyDemandData(updatedWeeklyDemandData);
 
+
       setCurrentWeekIndex(currentWeekIndex + 1);
-      
     } else {
       setShowCongratsModal(false);
       // Handle the case when all weeks have been filled
@@ -175,14 +183,21 @@ const MonthlyPricing = () => {
       {!showCongratsModal && (
         <div className="pre-congrats-content">
           {doDisplayCard && (
+            <>
+            
             <DisplayCard
-              title={currentWeekIndex}
-              imageUrl="https://via.placeholder.com/300"
+              title={currentWeekIndex}    
               currentWealth={weeklyRentData[currentWeekIndex - 1] * 7}
               fixedCost={100}
               miscCost={50}
               onContinue={toggle}
+              expectedValue={(weeklyDemandData[currentWeekIndex- 1] * 10)} 
+              userValue={weeklyRentData[currentWeekIndex - 1]} 
+              userValue2={competatorRent} 
+              fluctation={thisWeekDeviation * 10}
             />
+              
+            </>
           )}
           <div className="week-container">
             <h1>Comprehensive Property Insights</h1>
@@ -201,7 +216,7 @@ const MonthlyPricing = () => {
             <h3>No of Bathrooms: {currentGameData.numberOfRooms}</h3>
             <h3>No of Accommodates: {currentGameData.accommodation}</h3>
             <h3>Property Type: {currentGameData.propertyType}</h3>
-            <HorizontalTable data={weeklyRentData} />
+            <HorizontalTable data={weeklyRentData} dataPercentage={weeklyPercentageLossData}/>
           </div>
 
           <div className="text-container">
@@ -219,7 +234,8 @@ const MonthlyPricing = () => {
                 alt="Temp"
               />
             </div>
-            <BellGraph compRent={competatorRent} fluctation={currentGameData.accommodates}/>
+            <BellGraph expectedValue={(weeklyDemandData[currentWeekIndex- 1] * 10)} userValue={weeklyRentData[currentWeekIndex - 1]} userValue2={competatorRent} fluctation={thisWeekDeviation * 10}/>
+            {/* <BellGraph expectedValue={50} userValue={30} fluctation={10}/> */}
             <PriceTable />
           </div>
           <div className="rng-container">

@@ -1,95 +1,113 @@
-import React, { useState } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import React from 'react';
+import { Scatter } from 'react-chartjs-2';
+import 'chart.js/auto';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-const BellGraph = () => {
-    const [userValue, setUserValue] = useState(42); // Example user value
-    const [expectedValue, setExpectedValue] = useState(50); // Example expected value
-    const [fluctuation, setFluctuation] = useState(10); // Example fluctuation
-
-    // Function to generate bell curve data, normalizing peak to 100%
-    const generateBellCurveData = (expectedValue, userValue, fluctuation) => {
-        const data = [];
-        const labels = [];
-        const highlight = [];
-        const start = expectedValue - 3 * fluctuation;
-        const end = expectedValue + 3 * fluctuation;
-        let peakY = 0;
-
-        // First pass to find peak y-value
-        for (let x = start; x <= end; x++) {
-            const variance = Math.pow(fluctuation, 2);
-            const y = (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-0.5 * Math.pow((x - expectedValue) / Math.sqrt(variance), 2));
-            if (y > peakY) peakY = y;
-        }
-
-        // Second pass to normalize based on peak
-        for (let x = start; x <= end; x++) {
-            labels.push(x);
-            const variance = Math.pow(fluctuation, 2);
-            let y = (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-0.5 * Math.pow((x - expectedValue) / Math.sqrt(variance), 2));
-            y = (y / peakY) * 100; // Normalize peak to 100%
-            data.push(y);
-
-            // Highlight user value
-            if (x === userValue) {
-                highlight.push(y);
-            } else {
-                highlight.push(null);
-            }
-        }
-
-        return {
-            labels,
-            datasets: [
-                { label: 'Bell Curve', data, borderColor: 'rgb(75, 192, 192)', tension: 0.1 },
-                { label: 'User Value', data: highlight, borderColor: 'rgb(255, 99, 132)', pointBackgroundColor: 'rgb(255, 99, 132)', pointRadius: 5, tension: 0.1, fill: false, showLine: false }
-            ]
-        };
-    };
-
-    const data = generateBellCurveData(expectedValue, userValue, fluctuation);
-
-    const options = {
-        scales: {
-            y: {
-                title: {
-                    display: true,
-                    text: 'Demand (%)'
-                },
-                ticks: {
-                    callback: function(value) {
-                        return value + '%';
-                    },
-                    min: 0,
-                    max: 100,
-                }
-            }
-        }
-    };
-
-    const handleUserValueChange = (event) => {
-        setUserValue(parseInt(event.target.value));
-    };
-
-    const handleExpectedValueChange = (event) => {
-        setExpectedValue(parseInt(event.target.value));
-    };
-
-    const handleFluctuationChange = (event) => {
-        setFluctuation(parseInt(event.target.value));
-    };
-
+const BellGraph = ({ expectedValue, userValue, userValue2, fluctation }) => {
+  // Function to calculate the probability density for a given x
+  const gaussian = (x, mean, standardDeviation) => {
+    const gaussianConstant = 1 / Math.sqrt(2 * Math.PI);
+    const peakValue = gaussianConstant / standardDeviation; // Maximum value of the Gaussian function
     return (
-        <div>
-            <label>User Value: <input type="number" value={userValue} onChange={handleUserValueChange} /></label>
-            <label>Expected Value: <input type="number" value={expectedValue} onChange={handleExpectedValueChange} /></label>
-            <label>Fluctuation: <input type="number" value={fluctuation} onChange={handleFluctuationChange} /></label>
-            <Line data={data} options={options} />
-        </div>
-    );
+      (gaussianConstant *
+      (1 / standardDeviation) *
+      Math.exp(-0.5 * Math.pow((x - mean) / standardDeviation, 2))) / peakValue
+    ) * 100; // Normalize and scale to 100
+  };
+
+  // Generate data points for the bell curve
+  let curveDataPoints = [];
+  for (let x = expectedValue - 4 * fluctation; x <= expectedValue + 4 * fluctation; x += fluctation / 10) {
+    curveDataPoints.push({ x: x, y: gaussian(x, expectedValue, fluctation) });
+  }
+
+  // Separate dataset for the user values to highlight them
+  const userValueDataPoint = [{
+    x: userValue, 
+    y: gaussian(userValue, expectedValue, fluctation)
+  }];
+
+  const userValue2DataPoint = [{
+    x: userValue2,
+    y: gaussian(userValue2, expectedValue, fluctation)
+  }];
+
+  const data = {
+    datasets: [
+      {
+        type: 'line', // This will render this dataset as a line
+        label: 'Competitor Bell Curve',
+        data: curveDataPoints,
+        backgroundColor: 'rgba(0, 119, 204, 0.3)',
+        borderColor: 'rgba(0, 119, 204, 1)', // Make the line blue
+        borderWidth: 2, // Line thickness
+        pointRadius: 0, // Hide the points on the line
+        fill: true // Do not fill under the line
+      },
+      // {
+      //   label: 'You',
+      //   data: userValueDataPoint,
+      //   pointRadius: 5,
+      //   backgroundColor: 'red'
+      // },
+      // {
+      //   label: 'Competitor ', // New data point for the additional user value
+      //   data: userValue2DataPoint,
+      //   pointRadius: 5,
+      //   backgroundColor: 'green' // Set the color to green
+      // }
+    ],
+  };
+
+  const options = {
+    scales: {
+      x: {
+        type: 'linear',
+        position: 'bottom'
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          // Update to display ticks as percentages
+          callback: function(value) {
+            return value + '%';
+          }
+        },
+        max: 100 // Ensure y-axis goes up to 100%
+      }
+    },
+    plugins: {
+      tooltip: {
+        enabled: true,
+        // Customize tooltip
+        callbacks: {
+          // Only show x-axis value
+          title: function(tooltipItems) {
+            //return `x: ${tooltipItems[0].formattedValue}`;
+            //return `(rent, %loss): ${tooltipItems[0].formattedValue}`;
+            return `rent: ${tooltipItems[0].raw.x}`;
+          },
+          label: function(tooltipItem) {
+            return ''; // Don't show the default label
+          }
+        }
+      },
+      legend: {
+        display: true,
+        labels: {
+          filter: function(legendItem, chartData) {
+            // Assuming the Competitor Bell Curve is the first dataset,
+            // you can adjust the index as necessary
+            if (chartData.datasets[legendItem.datasetIndex].label === 'Competitor Bell Curve') {
+              return false; // This will hide the Competitor Bell Curve from the legend
+            }
+            return true; // This will show all other datasets in the legend
+          }
+        }
+      }
+    },
+  };
+
+  return <Scatter data={data} options={options} />;
 };
 
 export default BellGraph;
