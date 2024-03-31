@@ -69,9 +69,9 @@ const BellGraph = ({ expectedValue, fluctation }) => {
         ticks: {
           // Update to display ticks as percentages
           callback: function(value) {
-            if (value < 20) return "Low";
+            if (value < 10) return "Low";
             
-            if (value > 80) return "High";
+            if (value > 90) return "High";
           }
         },
         max: 100 // Ensure y-axis goes up to 100%
