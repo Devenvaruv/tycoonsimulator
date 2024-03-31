@@ -2,7 +2,7 @@ import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-const BellGraph = ({ expectedValue, userValue, userValue2, fluctation }) => {
+const BellGraph = ({ expectedValue, fluctation }) => {
   // Function to calculate the probability density for a given x
   const gaussian = (x, mean, standardDeviation) => {
     const gaussianConstant = 1 / Math.sqrt(2 * Math.PI);
@@ -21,15 +21,15 @@ const BellGraph = ({ expectedValue, userValue, userValue2, fluctation }) => {
   }
 
   // Separate dataset for the user values to highlight them
-  const userValueDataPoint = [{
-    x: userValue, 
-    y: gaussian(userValue, expectedValue, fluctation)
-  }];
+  // const userValueDataPoint = [{
+  //   x: userValue, 
+  //   y: gaussian(userValue, expectedValue, fluctation)
+  // }];
 
-  const userValue2DataPoint = [{
-    x: userValue2,
-    y: gaussian(userValue2, expectedValue, fluctation)
-  }];
+  // const userValue2DataPoint = [{
+  //   x: userValue2,
+  //   y: gaussian(userValue2, expectedValue, fluctation)
+  // }];
 
   const data = {
     datasets: [
@@ -62,14 +62,16 @@ const BellGraph = ({ expectedValue, userValue, userValue2, fluctation }) => {
     scales: {
       x: {
         type: 'linear',
-        position: 'bottom'
+        position: 'bottom',
       },
       y: {
         beginAtZero: true,
         ticks: {
           // Update to display ticks as percentages
           callback: function(value) {
-            return value + '%';
+            if (value < 20) return "Low";
+            
+            if (value > 80) return "High";
           }
         },
         max: 100 // Ensure y-axis goes up to 100%
@@ -82,9 +84,17 @@ const BellGraph = ({ expectedValue, userValue, userValue2, fluctation }) => {
         callbacks: {
           // Only show x-axis value
           title: function(tooltipItems) {
-            //return `x: ${tooltipItems[0].formattedValue}`;
-            //return `(rent, %loss): ${tooltipItems[0].formattedValue}`;
-            return `rent: ${tooltipItems[0].raw.x}`;
+            try {
+              const xValue = parseFloat(tooltipItems[0].raw.x);
+              if (!isNaN(xValue)) {
+                return `rent: ${xValue.toFixed(2)}`;
+              } else {
+                return 'Invalid Value'; // Placeholder for non-numeric values
+              }
+            } catch (error) {
+              console.error("Error formatting tooltip title:", error);
+              return 'Error'; // Placeholder in case of error
+            }
           },
           label: function(tooltipItem) {
             return ''; // Don't show the default label

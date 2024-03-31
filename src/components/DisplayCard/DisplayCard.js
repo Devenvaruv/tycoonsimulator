@@ -106,17 +106,18 @@ const DisplayCard = ({ title, imageUrl, currentWealth, fixedCost, miscCost,onCon
       }
     },
   };
-    const total = currentWealth - fixedCost - miscCost; // Calculate total based on provided values
+    //const total = currentWealth - fixedCost - miscCost; // Calculate total based on provided values
   
     return (
       <div className="card">
         <h2>Week: {title} Revenue</h2>
-        <Scatter data={data} options={options} />;
-        <div className="card-content">         
-          <div className="info-row">
-            <p>Current Wealth:</p><p>{currentWealth}</p>
+        <Scatter data={data} options={options} />
+        <div className="info-row">
+            <p>Weekly Revenue:</p><p>{currentWealth}</p>
           </div>
-          <div className="info-row">
+        <div className="card-content">         
+          
+          {/* <div className="info-row">
             <p>Fixed Cost:</p><p>-{fixedCost}</p>
           </div>
           <div className="info-row">
@@ -124,7 +125,7 @@ const DisplayCard = ({ title, imageUrl, currentWealth, fixedCost, miscCost,onCon
           </div>
           <div className="info-row">
             <p>Total:</p><p>{total}</p>
-          </div>
+          </div> */}
           <button onClick={onContinue}>Continue</button>
         </div>
       </div>

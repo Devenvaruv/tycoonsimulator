@@ -11,7 +11,7 @@ function Leaderboard({ players }) {
             <th>Rank</th>
             <th>Name</th>
             <th>Date</th>
-            <th>Score</th>
+            <th>Total % Loss</th>
           </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@ function GameOutcome() {
     fetch('https://tycoonsim.wn.r.appspot.com/findAllTycoonRecord')
       .then(response => response.json())
       .then(data => {
-        const sortedData = data.sort((a, b) => b.score - a.score);
+        const sortedData = data.sort((a, b) => a.score - b.score);
         setPlayers(sortedData.map((player, index) => ({
           ...player,
           rank: index + 1 // Adding rank property

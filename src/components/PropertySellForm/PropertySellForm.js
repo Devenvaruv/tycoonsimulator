@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 const PropertySellForm = ({ onSell }) => {
   // State for each input field
   const [currentRentPrice, setCurrentRentPrice] = useState('');
-  const [rentOption, setRentOption] = useState('');
+  const [rentOption, setRentOption] = useState('whole');
   const [currentWeek, setCurrentWeek] = useState(1);
   const [error, setError] = useState('');
   
@@ -35,7 +35,7 @@ const PropertySellForm = ({ onSell }) => {
     };
     onSell(propertySellData); // Pass the data back up to the parent component
     setCurrentRentPrice('');
-    setRentOption('');
+    //setRentOption('');
     setCurrentWeek(currentWeek + 1); 
   };
 

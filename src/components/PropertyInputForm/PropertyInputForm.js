@@ -13,6 +13,10 @@ const PropertyInputForm = ({ onSubmit }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const allowedBathroomValues = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 1, 2, 3, 4, 5, 6, 7, 8, 12];
+  const allowedRoomValues = [1, 2, 3, 4, 5, 6, 7, 9, 12, 14];
+
+
   // Handle the form submission
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevents the default form submit action (page reload)
@@ -22,12 +26,12 @@ const PropertyInputForm = ({ onSubmit }) => {
       return; // Stop the form submission
     }
 
-    if ((parseInt(bathrooms) > 12) || (parseInt(bathrooms) <= 0 ) || (!bathrooms)) {
-      setError('Bathrooms must be between 0 and 12')
+    if (!allowedBathroomValues.includes(Number(bathrooms))) {
+      setError('Invalid Number of Bathrooms, Must be between 1 and 12')
       return;
     }
 
-    if ((parseInt(numberOfRooms) > 14) || (parseInt(numberOfRooms) <= 0 ) || (!numberOfRooms)) {
+    if (!allowedRoomValues.includes(Number(numberOfRooms))) {
       setError('Room must be between 0 and 14')
       return;
     }
@@ -36,7 +40,7 @@ const PropertyInputForm = ({ onSubmit }) => {
       return; // Stop the form submission
     }
     if ((parseInt(accommodation) >= 17) || (parseInt(accommodation) <= 0 ) || (!accommodation)) {
-      setError('Accommodation must be between 0 and 16');
+      setError('Accommodation must be between 1 and 16');
       
       return; // Stop the form submission
     }

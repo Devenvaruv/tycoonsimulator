@@ -6,7 +6,8 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    background-color: yellow;
+    background-color: #B7D1DA;
+    padding: 10px;
   }
   
   .card-img {
@@ -16,8 +17,14 @@
   }
   
   .card-content {
-    padding: 16px;
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Aligns children (including the button) to the right */
+}
+
+.button {
+    margin-top: 10px; /* Adds some space above the button, adjust as needed */
+}
   
   .card-content h2 {
     margin: 0 0 16px 0;
