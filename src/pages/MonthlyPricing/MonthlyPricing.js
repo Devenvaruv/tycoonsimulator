@@ -218,8 +218,9 @@ const MonthlyPricing = () => {
 
   const graphRentData = weeklyRentData.map((rent, index) => ({
     time: `Week ${index + 1}`,
-    demand: rent,
+    userRent: rent,
     compRent: rent+10,
+    avgRent: sum,
   }));
 
   return (
@@ -287,7 +288,7 @@ const MonthlyPricing = () => {
             <PriceTable />
           </div>
           <div className="rng-container">
-            <DemandVsTimeGraph userData={graphData2}/>
+            <DemandVsTimeGraph userData={graphRentData}/>
             <div className="rent-setter-container">
               <PropertySellForm onSell={handleFormSubmit} />
               <p>{}</p>
