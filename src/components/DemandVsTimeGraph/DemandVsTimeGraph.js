@@ -1,14 +1,12 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,ReferenceArea, ResponsiveContainer } from 'recharts';
 
-const DemandVsTimeGraph = ({ userData}) => {
-  const tickValues = [0, 25, 50, 75, 100];
+const DemandVsTimeGraph = ({ userData }) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart
       data={userData}
-        
         margin={{
           top: 30,
           right: 40,
@@ -19,7 +17,7 @@ const DemandVsTimeGraph = ({ userData}) => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="time" />
         <YAxis 
-          domain={[0, 60]}  // Set the min and max values for the Y-axis
+          domain={[0, 1100]}  // Set the min and max values for the Y-axis
           allowDataOverflow={true}  // Allows the graph to adjust to data outside of the domain range
         />
         <Tooltip />
@@ -28,6 +26,7 @@ const DemandVsTimeGraph = ({ userData}) => {
         <Line type="monotone" dataKey="compRent" stroke="#63D471" activeDot={{ r: 8 }} />
         <Line type="monotone" dataKey="avgRent" stroke="#52C000" activeDot={{ r: 8 }} />
        
+        <ReferenceArea y1={40} y2={60} strokeOpacity={0.3} fill="green" fillOpacity={0.3} />
       </LineChart>
     </ResponsiveContainer>
   );

@@ -18,7 +18,19 @@ const HorizontalTable = ({ data , dataPercentage }) => { // Accept data as a pro
         </thead>
         <tbody>
           <tr>
-            <th className="th-td-sm"> Rent</th>
+            <th className="th-td-sm"> Your Demand</th>
+            {data.map((income, index) => (
+              <td key={index} className="th-td-sm">{income}</td>
+            ))}
+          </tr>
+          <tr>
+            <th className="th-td-sm"> Comp Demand</th>
+            {data.map((income, index) => (
+              <td key={index} className="th-td-sm">{0}</td>
+            ))}
+          </tr>
+          <tr>
+            <th className="th-td-sm"> total Demand</th>
             {data.map((income, index) => (
               <td key={index} className="th-td-sm">{income}</td>
             ))}
@@ -29,6 +41,7 @@ const HorizontalTable = ({ data , dataPercentage }) => { // Accept data as a pro
               <td key={index2} className="th-td-sm">{income2}%</td>
             ))}
           </tr>
+          
         </tbody>
       </table>
     </div>
