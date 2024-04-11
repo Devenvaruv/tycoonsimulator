@@ -8,3 +8,13 @@
     line-height: 1.6; /* Example for line height */
     font-size: 16px; /* Example for font size */
 }
+.button-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+}
+.wofButton {
+    /* Button styling */
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}

@@ -27,7 +27,7 @@ const MonthlyPricing = () => {
   const [weeklyPercentageLossData, setWeeklyPercentageLossData] = useState(
     Array(16).fill(0)
   );
-  const jsonData = require("./df.json"); // Load the data from the local JSON file
+  const jsonData = require("./df.json"); 
 
   const toggle = () => {
     if(currentWeekIndex >= 16){
@@ -211,7 +211,15 @@ const MonthlyPricing = () => {
 
   const graphData2 = weeklyDemandData.map((rent, index) => ({
     time: `Week ${index + 1}`,
+    userRent: rent,
+    compRent: rent+10,
+    avgRent: sum,
+  }));
+
+  const graphRentData = weeklyRentData.map((rent, index) => ({
+    time: `Week ${index + 1}`,
     demand: rent,
+    compRent: rent+10,
   }));
 
   return (
@@ -219,7 +227,7 @@ const MonthlyPricing = () => {
       {!showCongratsModal && (
         <div className="pre-congrats-content">
           {doDisplayCard && (
-            <>
+            
               <DisplayCard
                 title={currentWeekIndex}
                 currentWealth={weeklyRentData[currentWeekIndex - 1] * 7}
@@ -231,7 +239,7 @@ const MonthlyPricing = () => {
                 userValue2={competatorRent}
                 fluctation={thisWeekDeviation * 10}
               />
-            </>
+            
           )}
           <div className="week-container">
             <h1>Comprehensive Property Insights</h1>
@@ -279,7 +287,7 @@ const MonthlyPricing = () => {
             <PriceTable />
           </div>
           <div className="rng-container">
-            <DemandVsTimeGraph data={graphData2} />
+            <DemandVsTimeGraph userData={graphData2}/>
             <div className="rent-setter-container">
               <PropertySellForm onSell={handleFormSubmit} />
               <p>{}</p>

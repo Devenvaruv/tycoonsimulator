@@ -20,13 +20,14 @@ const CustomYAxisTick = ({ y, payload }) => {
   );
 };
 
-const DemandVsTimeGraph = ({ data }) => {
+const DemandVsTimeGraph = ({ userData}) => {
   const tickValues = [0, 25, 50, 75, 100];
 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart
-        data={data}
+      data={userData}
+        
         margin={{
           top: 30,
           right: 40,
@@ -39,7 +40,9 @@ const DemandVsTimeGraph = ({ data }) => {
         <YAxis tick={<CustomYAxisTick />} ticks={tickValues} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="demand" stroke="#63D471" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="compRent" stroke="#63D471" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="userRent" stroke="#19A000" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="avgRent" stroke="#52C000" activeDot={{ r: 8 }} />
        
       </LineChart>
     </ResponsiveContainer>
