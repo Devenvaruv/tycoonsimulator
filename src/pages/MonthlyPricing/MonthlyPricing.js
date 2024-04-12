@@ -18,16 +18,19 @@ const MonthlyPricing = () => {
   const [showCongratsModal, setShowCongratsModal] = useState(false);
   const [doDisplayCard, setDoDisplayCard] = useState(false);
   const [userName, setUserName] = useState("");
-  const [competatorRent, setCompetatorRent] = useState();
   const [thisWeekDeviation, setThisWeekDeviation] = useState(1);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
   const [weeklyRentData, setWeeklyRentData] = useState(Array(16).fill(0));
+  const [weeklyCompRentData, setWeeklyCompRentData] = useState(Array(16).fill(0));
+
   const [weeklyDemandData, setWeeklyDemandData] = useState(Array(16).fill(0));
-  const [weeklyPercentageLossData, setWeeklyPercentageLossData] = useState(
-    Array(16).fill(0)
-  );
+  
+  const [weeklyPercentageLossData, setWeeklyPercentageLossData] = useState(Array(16).fill(0));
   const jsonData = require("./df.json"); 
+  
+  const [sum, setSum] = useState(50);
+  const [maxDemand, setMaxDemand] = useState(5);
 
   const toggle = () => {
     if(currentWeekIndex >= 16){
@@ -42,7 +45,6 @@ const MonthlyPricing = () => {
     });
   };
 
-  const [sum, setSum] = useState(50); // Using state to store the sum
 
   useEffect(() => {
     // Assuming `jsonData` is available within this component, or fetched inside this useEffect
@@ -56,19 +58,22 @@ const MonthlyPricing = () => {
       property_type: "Entire home/apt",
       // 'week' will be set in the loop
     };
+    let tempMaxDemand = 5;
 
     for (let week = 1; week <= 16; week++) {
       currentFilters.week = week;
       const matchingRow = findMatchingRow(jsonData, currentFilters);
       if (matchingRow) {
         tempSum += matchingRow.simulated_occupancy; 
+        tempMaxDemand = Math.max(maxDemand, matchingRow.simulated_occupancy);
+        setMaxDemand(Math.round(tempMaxDemand));
       } else {
         tempSum += 5;
       }
     }
 
-    setSum((tempSum / 16) * 10); // Update state with the final sum
-  }, [currentGameData]);
+    setSum(Math.round((tempSum / 16) * 10)); // Update state with the final sum
+  }, [currentGameData, jsonData, maxDemand]);
 
   const getRandomNumberAround = (center, deviation) => {
     const min = center - deviation;
@@ -137,11 +142,11 @@ const MonthlyPricing = () => {
     );
     const currentWeekSimulatedOccupancy =
       (matchingRow ? matchingRow.simulated_occupancy : 5) * 10;
-    const competatorRentRandom = getRandomNumberAround(
+    const competatorRentRandom = Math.round(getRandomNumberAround(
       currentWeekSimulatedOccupancy,
       thisWeekDeviation * 10
-    );
-    setCompetatorRent(competatorRentRandom);
+    ));
+    
 
     setDoDisplayCard(!doDisplayCard);
 
@@ -150,13 +155,15 @@ const MonthlyPricing = () => {
     if (currentWeekIndex < 17) {
       const updatedWeeklyRentData = [...weeklyRentData];
 
-      updatedWeeklyRentData[currentWeekIndex] = currentWeekWinner
-        ? parseFloat(data.currentRentPrice)
-        : 0;
+      updatedWeeklyRentData[currentWeekIndex] = parseFloat(data.currentRentPrice);
+
+      const updatedWeeklyCompRentData = [...weeklyCompRentData];
+      
+      updatedWeeklyCompRentData[currentWeekIndex] = competatorRentRandom;
 
       const updatedWeeklyDemandData = [...weeklyDemandData];
       updatedWeeklyDemandData[currentWeekIndex] = matchingRow
-        ? matchingRow.simulated_occupancy
+        ? Math.round(matchingRow.simulated_occupancy)
         : 5;
 
       const updatedWeeklyPercentageLossData = [...weeklyPercentageLossData];
@@ -170,10 +177,12 @@ const MonthlyPricing = () => {
         
 
       setWeeklyPercentageLossData(updatedWeeklyPercentageLossData);
+      setWeeklyCompRentData(updatedWeeklyCompRentData);
       setWeeklyRentData(updatedWeeklyRentData);
       setWeeklyDemandData(updatedWeeklyDemandData);
 
       setCurrentWeekIndex(currentWeekIndex + 1);
+
     } else {
       setShowCongratsModal(true);
       // Handle the case when all weeks have been filled
@@ -181,26 +190,18 @@ const MonthlyPricing = () => {
     }
   };
 
-  const graphData2 = weeklyDemandData.map((rent, index) => ({
-    time: `Week ${index + 1}`,
-    userRent: rent,
-    compRent: rent+10,
-    avgRent: sum,
-  }));
-
   const graphRentData = weeklyRentData.map((rent, index) => ({
-    time: `Week ${index + 1}`,
+    time: `Week ${index+ 1}`,
     userRent: rent,
-    compRent: rent+10,
+    compRent: weeklyCompRentData[index],
     avgRent: sum,
   }));
-
+  
   return (
     <div className="rent-determination-container">
       {!showCongratsModal && (
         <div className="pre-congrats-content">
           {doDisplayCard && (
-            
               <DisplayCard
                 title={currentWeekIndex}
                 currentWealth={weeklyRentData[currentWeekIndex - 1] * 7}
@@ -209,10 +210,9 @@ const MonthlyPricing = () => {
                 onContinue={toggle}
                 expectedValue={weeklyDemandData[currentWeekIndex - 1] * 10}
                 userValue={weeklyRentData[currentWeekIndex - 1]}
-                userValue2={competatorRent}
+                userValue2={weeklyCompRentData[currentWeekIndex - 1]}
                 fluctation={thisWeekDeviation * 10}
               />
-            
           )}
           <div className="week-container">
             <h1>Comprehensive Property Insights</h1>
@@ -246,7 +246,7 @@ const MonthlyPricing = () => {
             <PriceTable />
           </div>
           <div className="rng-container">
-            <DemandVsTimeGraph userData={graphRentData}/>
+            <DemandVsTimeGraph userData={graphRentData} maxRent={maxDemand * 10}/>
             <div className="rent-setter-container">
               <PropertySellForm onSell={handleFormSubmit} />
               <p>{}</p>

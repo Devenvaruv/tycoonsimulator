@@ -30,13 +30,13 @@ const HorizontalTable = ({ data , dataPercentage }) => { // Accept data as a pro
             ))}
           </tr>
           <tr>
-            <th className="th-td-sm"> total Demand</th>
+            <th className="th-td-sm"> Total Demand</th>
             {data.map((income, index) => (
               <td key={index} className="th-td-sm">{income}</td>
             ))}
           </tr>
           <tr>
-            <th className="th-td-sm"> % loss</th>
+            <th className="th-td-sm"> % Occurance Loss</th>
             {dataPercentage.map((income2, index2) => (
               <td key={index2} className="th-td-sm">{income2}%</td>
             ))}

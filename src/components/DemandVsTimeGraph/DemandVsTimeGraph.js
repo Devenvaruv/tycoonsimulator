@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,ReferenceArea, ResponsiveContainer } from 'recharts';
 
-const DemandVsTimeGraph = ({ userData }) => {
+const DemandVsTimeGraph = ({ userData, maxRent }) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -23,10 +23,10 @@ const DemandVsTimeGraph = ({ userData }) => {
         <Tooltip />
         <Legend />
         <Line type="monotone" dataKey="userRent" stroke="#19A000" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="compRent" stroke="#63D471" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="avgRent" stroke="#52C000" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="compRent" stroke="#FF0000" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="avgRent" stroke="#000000" activeDot={{ r: 8 }} />
        
-        <ReferenceArea y1={40} y2={60} strokeOpacity={0.3} fill="green" fillOpacity={0.3} />
+        <ReferenceArea y1={40} y2={maxRent} strokeOpacity={0.3} fill="green" fillOpacity={0.3} />
       </LineChart>
     </ResponsiveContainer>
   );
