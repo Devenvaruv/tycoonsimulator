@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
+
 import HorizontalTable from "../../components/HorizontalTable/HorizontalTable";
 import PropertySellForm from "../../components/PropertySellForm/PropertySellForm";
 
@@ -59,18 +61,37 @@ const MonthlyPricing = () => {
       // 'week' will be set in the loop
     };
     let tempMaxDemand = 5;
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        console.log("User is signed in:", user);
+        
+        setUserName(user.displayName);
+
+      } else {
+        // No user is signed in.
+        console.log("No user is signed in.");
+      }
+    });
+   
+
 
     for (let week = 1; week <= 16; week++) {
       currentFilters.week = week;
       const matchingRow = findMatchingRow(jsonData, currentFilters);
       if (matchingRow) {
         tempSum += matchingRow.simulated_occupancy; 
-        tempMaxDemand = Math.max(maxDemand, matchingRow.simulated_occupancy);
-        setMaxDemand(Math.round(tempMaxDemand));
+        tempMaxDemand = Math.max(tempMaxDemand, matchingRow.simulated_occupancy);
+        
+        
       } else {
         tempSum += 5;
       }
     }
+ 
+    setMaxDemand(Math.round(tempMaxDemand))
+    console.log("ddddddd", maxDemand);
 
     setSum(Math.round((tempSum / 16) * 10)); // Update state with the final sum
   }, [currentGameData, jsonData, maxDemand]);
@@ -184,9 +205,10 @@ const MonthlyPricing = () => {
       setCurrentWeekIndex(currentWeekIndex + 1);
 
     } else {
+      alert("Deven can this be the final screen?")
       setShowCongratsModal(true);
       // Handle the case when all weeks have been filled
-      console.log("All weeks have been filled");
+      
     }
   };
 
@@ -232,8 +254,10 @@ const MonthlyPricing = () => {
             <h3>No of Accommodates: {currentGameData.accommodation}</h3>
             <h3>Property Type: {currentGameData.propertyType}</h3>
             <HorizontalTable
-              data={weeklyDemandData}
-              dataPercentage={weeklyPercentageLossData}
+              week={currentWeekIndex}
+              income={weeklyDemandData[currentWeekIndex - 1]}
+              incomePercentage={weeklyPercentageLossData[currentWeekIndex - 1]}
+              isYourDemand={weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1]}
             />
           </div>
 
