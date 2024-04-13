@@ -13,6 +13,7 @@ import PriceTable from "../../components/PriceTable/PriceTable";
 import { GameDataContext } from "../../utils/GameDataContext";
 import "./MonthlyPricing.css";
 import DisplayCard from "../../components/DisplayCard/DisplayCard";
+import VerticalTable from "../../components/VerticalTable/VerticalTable";
 
 const MonthlyPricing = () => {
   const { currentGameData } = useContext(GameDataContext);
@@ -259,14 +260,20 @@ const MonthlyPricing = () => {
           </div>
 
           <div className="text-container">
-            
-            
-            <HorizontalTable
+          <VerticalTable
               week={currentWeekIndex}
               income={weeklyDemandData[currentWeekIndex - 1]}
               incomePercentage={weeklyPercentageLossData[currentWeekIndex - 1]}
               isYourDemand={weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1]}
             />
+            
+            
+            {/* <HorizontalTable
+              week={currentWeekIndex}
+              income={weeklyDemandData[currentWeekIndex - 1]}
+              incomePercentage={weeklyPercentageLossData[currentWeekIndex - 1]}
+              isYourDemand={weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1]}
+            /> */}
           </div>
           <div className="rng-container">
             <DemandVsTimeGraph userData={graphRentData} maxRent={maxDemand * 10}/>

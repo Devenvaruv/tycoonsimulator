@@ -1,0 +1,23 @@
+.table-container {
+    max-width: 600px;
+    margin: auto;
+    overflow-x: auto;
+  }
+  
+  .table-sm {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+ 
+  
+  .th-td-sm {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .high-loss {
+    background-color: rgb(199, 63, 63); /* Makes background color red */
+    color: white; /* Changes text color to white for better readability */
+  }
