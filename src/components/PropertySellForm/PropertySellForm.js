@@ -43,7 +43,7 @@ const PropertySellForm = ({ onSell }) => {
     <form onSubmit={handleSubmit}>
       {error && <div className="error-message">{error}</div>}
       <div>
-        <label htmlFor="currentRentPrice">Weekly Night Rental Rate For Week: {currentWeek}</label>
+        <label htmlFor="currentRentPrice">Weekly Rate For Week {currentWeek}</label>
         <input
           type="number"
           id="currentRentPrice"

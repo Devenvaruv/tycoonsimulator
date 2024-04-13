@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
+import { getAuth} from "firebase/auth";
 
 import HorizontalTable from "../../components/HorizontalTable/HorizontalTable";
 import PropertySellForm from "../../components/PropertySellForm/PropertySellForm";
@@ -109,10 +109,10 @@ const MonthlyPricing = () => {
     }
     try {
       const requestBody = {
-        // Replace these with actual property names and values you want to send
+       
         handle: userName,
-        score: weeklyPercentageLossData.reduce((acc, current) => acc + current, 0), // Replace with actual score variable
-        date: new Date().toLocaleString(), // Or any other date format as per your backend requirement
+        score: weeklyPercentageLossData.reduce((acc, current) => acc + current, 0)/16, 
+        date: new Date().toLocaleString(), 
       };
 
       // Perform the POST request
@@ -122,7 +122,7 @@ const MonthlyPricing = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Include other headers as needed, e.g., authorization
+           
           },
           body: JSON.stringify(requestBody),
         }
@@ -132,7 +132,7 @@ const MonthlyPricing = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      // Process the response (optional)
+     
       const responseData = await response.json();
       console.log("Response from API:", responseData);
 
@@ -143,7 +143,7 @@ const MonthlyPricing = () => {
     }
     setShowCongratsModal(false);
 
-    navigate("/game-outcome", { state: { userName } }); // Pass userName in state if needed
+    navigate("/game-outcome", { state: { userName } }); 
   };
 
   const handleFormSubmit = (data) => {
@@ -253,21 +253,20 @@ const MonthlyPricing = () => {
             <h3>No of Bathrooms: {currentGameData.bathrooms}</h3>
             <h3>No of Accommodates: {currentGameData.accommodation}</h3>
             <h3>Property Type: {currentGameData.propertyType}</h3>
+            
+            <PriceTable />
+            
+          </div>
+
+          <div className="text-container">
+            
+            
             <HorizontalTable
               week={currentWeekIndex}
               income={weeklyDemandData[currentWeekIndex - 1]}
               incomePercentage={weeklyPercentageLossData[currentWeekIndex - 1]}
               isYourDemand={weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1]}
             />
-          </div>
-
-          <div className="text-container">
-            <BellGraph
-              expectedValue={sum}
-              fluctation={sum - 40}
-            />
-            <p>{"Normal distribution curve of properties in your area"}</p>
-            <PriceTable />
           </div>
           <div className="rng-container">
             <DemandVsTimeGraph userData={graphRentData} maxRent={maxDemand * 10}/>
