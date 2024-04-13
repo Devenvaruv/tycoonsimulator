@@ -11,6 +11,7 @@ function Leaderboard({ players }) {
             <th>Rank</th>
             <th>Name</th>
             <th>Date</th>
+            <th>Avg Rent</th>
             <th>Total % Loss</th>
           </tr>
         </thead>
@@ -20,6 +21,7 @@ function Leaderboard({ players }) {
               <td>{index + 1}</td>
               <td>{player.handle}</td>
               <td>{player.date}</td>
+              <td>{player.rent}</td>
               <td>{player.score}</td>
             </tr>
           ))}

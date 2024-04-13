@@ -110,6 +110,7 @@ const MonthlyPricing = () => {
         handle: userName,
         score: weeklyPercentageLossData.reduce((acc, current) => acc + current, 0)/16, 
         date: new Date().toLocaleString(), 
+        rent: weeklyRentData.reduce((acc, current) => acc + current, 0)/16
       };
 
       // Perform the POST request
@@ -242,11 +243,11 @@ const MonthlyPricing = () => {
               competitive edge by leveraging our curated data to inform your
               strategic decisions.
             </p>
-            <h3>Zipcode: {currentGameData.zipCode}</h3>
-            <h3>No of Rooms: {currentGameData.numberOfRooms}</h3>
-            <h3>No of Bathrooms: {currentGameData.bathrooms}</h3>
-            <h3>No of Accommodates: {currentGameData.accommodation}</h3>
-            <h3>Property Type: {currentGameData.propertyType}</h3>
+            <h4>Zipcode: {currentGameData.zipCode}</h4>
+            <h4>No of Rooms: {currentGameData.numberOfRooms}</h4>
+            <h4>No of Bathrooms: {currentGameData.bathrooms}</h4>
+            <h4>No of Accommodates: {currentGameData.accommodation}</h4>
+            <h4>Property Type: {currentGameData.propertyType}</h4>
             
             <PriceTable />
             
