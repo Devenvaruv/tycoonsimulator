@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,ReferenceArea, ResponsiveContainer } from 'recharts';
 
-const DemandVsTimeGraph = ({ userData, maxRent }) => {
+const DemandVsTimeGraph = ({ userData, maxRent, maxYaxis}) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -17,7 +17,7 @@ const DemandVsTimeGraph = ({ userData, maxRent }) => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="time" />
         <YAxis 
-          domain={[0, 1100]}  // Set the min and max values for the Y-axis
+          domain={[0, maxYaxis]}  // Set the min and max values for the Y-axis
           allowDataOverflow={true}  // Allows the graph to adjust to data outside of the domain range
         />
         <Tooltip />

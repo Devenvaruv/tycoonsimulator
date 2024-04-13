@@ -4,11 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import { getAuth} from "firebase/auth";
 
-import HorizontalTable from "../../components/HorizontalTable/HorizontalTable";
 import PropertySellForm from "../../components/PropertySellForm/PropertySellForm";
-
 import DemandVsTimeGraph from "../../components/DemandVsTimeGraph/DemandVsTimeGraph";
-import BellGraph from "../../components/BellGraph/BellGraph";
 import PriceTable from "../../components/PriceTable/PriceTable";
 import { GameDataContext } from "../../utils/GameDataContext";
 import "./MonthlyPricing.css";
@@ -21,7 +18,6 @@ const MonthlyPricing = () => {
   const [showCongratsModal, setShowCongratsModal] = useState(false);
   const [doDisplayCard, setDoDisplayCard] = useState(false);
   const [userName, setUserName] = useState("");
-  const [thisWeekDeviation, setThisWeekDeviation] = useState(1);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
   const [weeklyRentData, setWeeklyRentData] = useState(Array(16).fill(0));
@@ -159,14 +155,11 @@ const MonthlyPricing = () => {
 
     const matchingRow = findMatchingRow(jsonData, filters);
 
-    setThisWeekDeviation(
-      filters.accommodates / ((filters.bathrooms + filters.bedrooms) / 2)
-    );
     const currentWeekSimulatedOccupancy =
       (matchingRow ? matchingRow.simulated_occupancy : 5) * 10;
     const competatorRentRandom = Math.round(getRandomNumberAround(
       currentWeekSimulatedOccupancy,
-      thisWeekDeviation * 10
+      (currentWeekSimulatedOccupancy/10) * 2
     ));
     
 
@@ -227,14 +220,14 @@ const MonthlyPricing = () => {
           {doDisplayCard && (
               <DisplayCard
                 title={currentWeekIndex}
-                currentWealth={weeklyRentData[currentWeekIndex - 1] * 7}
+                currentWealth={(weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1])? weeklyRentData[currentWeekIndex - 1]: 0}
                 fixedCost={100}
                 miscCost={50}
                 onContinue={toggle}
                 expectedValue={weeklyDemandData[currentWeekIndex - 1] * 10}
                 userValue={weeklyRentData[currentWeekIndex - 1]}
                 userValue2={weeklyCompRentData[currentWeekIndex - 1]}
-                fluctation={thisWeekDeviation * 10}
+                fluctation={10}
               />
           )}
           <div className="week-container">
@@ -276,7 +269,7 @@ const MonthlyPricing = () => {
             /> */}
           </div>
           <div className="rng-container">
-            <DemandVsTimeGraph userData={graphRentData} maxRent={maxDemand * 10}/>
+            <DemandVsTimeGraph userData={graphRentData} maxRent={((maxDemand * 10) + (maxDemand * 2))} maxYaxis={maxDemand * 20}/>
             <div className="rent-setter-container">
               <PropertySellForm onSell={handleFormSubmit} />
               <p>{}</p>

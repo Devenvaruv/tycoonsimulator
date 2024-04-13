@@ -1,13 +1,16 @@
 .table-container {
-    max-width: 600px;
-    margin: auto;
-    overflow-x: auto;
-  }
+ 
+  width: 100%;
   
-  .table-sm {
-    width: 100%;
-    border-collapse: collapse;
-  }
+}
+  
+.table-sm {
+  width: 50%;
+  font-size: 0.8rem;
+  margin: auto;
+  border-collapse: collapse;
+  
+}
   
  
   
