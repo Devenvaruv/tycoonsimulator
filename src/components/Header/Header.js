@@ -7,13 +7,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithRedirect, GoogleAuthProvider , onAuthStateChanged} from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCfndJ5pcN5lfzyyTxlT0WbyBCTV0ktncM",
-    authDomain: "fir-test-58373.firebaseapp.com",
-    projectId: "fir-test-58373",
-    storageBucket: "fir-test-58373.appspot.com",
-    messagingSenderId: "971121072370",
-    appId: "1:971121072370:web:bdcdb9d48307b03f32586b",
-    measurementId: "G-BK9B9VWGFK",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId:  process.env.REACT_APP_FIREBASE_APP_ID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASURE_ID,
   };
   initializeApp(firebaseConfig);
 const Header = () => {
