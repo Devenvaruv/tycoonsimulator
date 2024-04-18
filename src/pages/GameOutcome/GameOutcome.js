@@ -4,13 +4,13 @@ import './Leaderboard.css';
 function Leaderboard({ players }) {
   return (
     <div className="leaderboard">
-      <h2>Leaderboard</h2>
+      <h1> </h1>
       <table>
         <thead>
           <tr>
             <th>Rank</th>
             <th>Name</th>
-            <th>Date</th>
+            <th>Date & Time</th>
             <th>Avg Rent</th>
             <th>Total % Loss</th>
           </tr>
@@ -41,7 +41,7 @@ function GameOutcome() {
         const sortedData = data.sort((a, b) => a.score - b.score);
         setPlayers(sortedData.map((player, index) => ({
           ...player,
-          rank: index + 1 // Adding rank property
+          rank: index + 1
         })));
       })
       .catch(error => {

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
 
-const PropertySellForm = ({ onSell }) => {
+const PropertySellForm = ({ onSell , currentWeek }) => {
   // State for each input field
   const [currentRentPrice, setCurrentRentPrice] = useState('');
   const [rentOption, setRentOption] = useState('whole');
-  const [currentWeek, setCurrentWeek] = useState(1);
   const [error, setError] = useState('');
   
 
@@ -23,8 +22,8 @@ const PropertySellForm = ({ onSell }) => {
       return;
     }
 
-    if ((currentRentPrice < 1) || (currentRentPrice > 19286)){
-      setError("Please enter rent between 0 and 19286");
+    if ((currentRentPrice < 1) || (currentRentPrice > 1200)){
+      setError("Please enter rent between 0 and 1200");
       return;
     }
     setError('');
@@ -35,8 +34,6 @@ const PropertySellForm = ({ onSell }) => {
     };
     onSell(propertySellData); // Pass the data back up to the parent component
     setCurrentRentPrice('');
-    //setRentOption('');
-    setCurrentWeek(currentWeek + 1); 
   };
 
   return (

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import "./VerticalTable.css";
 
-const VerticalTable = ({ week, income, incomePercentage, isYourDemand }) => {
-  const [yourDemandData, setYourDemandData] = useState(new Array(16).fill(0));
-  const [compDemandData, setCompDemandData] = useState(new Array(16).fill(0));
-  const [percentages, setPercentages] = useState(new Array(16).fill(0));
-
+const VerticalTable = ({ week, income, incomePercentage,isYourDemand }) => {
+  const [yourDemandData, setYourDemandData] = useState(JSON.parse(sessionStorage.getItem("yourDemandData")) || Array(16).fill(0));
+  const [compDemandData, setCompDemandData] = useState(JSON.parse(sessionStorage.getItem("compDemandData")) || Array(16).fill(0));
   useEffect(() => {
-    if (week >= 1 && week <= 16) {  // Assuming weeks are 1-indexed based on your original code
+    sessionStorage.setItem("yourDemandData", JSON.stringify(yourDemandData));
+    sessionStorage.setItem("compDemandData", JSON.stringify(compDemandData));
+  })
+  useEffect(() => {
+    if (week >= 1 && week <= 16) {  
       const newDataYourDemand = [...yourDemandData];
       const newDataCompDemand = [...compDemandData];
-      const newPercentages = [...percentages];
 
       if (isYourDemand) {
         newDataYourDemand[week - 1] = income;
@@ -18,11 +19,9 @@ const VerticalTable = ({ week, income, incomePercentage, isYourDemand }) => {
         newDataCompDemand[week - 1] = income;
       }
 
-      newPercentages[week - 1] = incomePercentage;
-
       setYourDemandData(newDataYourDemand);
       setCompDemandData(newDataCompDemand);
-      setPercentages(newPercentages);
+     
     }
   }, [week, income, incomePercentage, isYourDemand]);
 
@@ -54,8 +53,7 @@ const VerticalTable = ({ week, income, incomePercentage, isYourDemand }) => {
               <td className="th-td-sm">{yourDemandData[index]}</td>
               <td className="th-td-sm">{compDemandData[index]}</td>
               <td className="th-td-sm">{yourDemandData[index] + compDemandData[index]}</td>
-              {/* <td className="th-td-sm">{percentages[index]}%</td> */}
-              {renderPercentageCell(percentages[index])}
+              {renderPercentageCell(incomePercentage[index])}
             </tr>
           ))}
         </tbody>

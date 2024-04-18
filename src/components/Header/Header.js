@@ -14,8 +14,10 @@ const firebaseConfig = {
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId:  process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASURE_ID,
-  };
-  initializeApp(firebaseConfig);
+};
+
+initializeApp(firebaseConfig);
+
 const Header = () => {
   const location = useLocation();
   const [hasVisitedRent, setHasVisitedRent] = useState(false);

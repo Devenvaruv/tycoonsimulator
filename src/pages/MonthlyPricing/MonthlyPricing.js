@@ -18,18 +18,25 @@ const MonthlyPricing = () => {
   const [showCongratsModal, setShowCongratsModal] = useState(false);
   const [doDisplayCard, setDoDisplayCard] = useState(false);
   const [userName, setUserName] = useState("");
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(Number(sessionStorage.getItem("currentWeekIndex")) || 0);
 
-  const [weeklyRentData, setWeeklyRentData] = useState(Array(16).fill(0));
-  const [weeklyCompRentData, setWeeklyCompRentData] = useState(Array(16).fill(0));
-
-  const [weeklyDemandData, setWeeklyDemandData] = useState(Array(16).fill(0));
-  
-  const [weeklyPercentageLossData, setWeeklyPercentageLossData] = useState(Array(16).fill(0));
+  const [weeklyRentData, setWeeklyRentData] = useState(JSON.parse(sessionStorage.getItem("weeklyRentData")) || Array(16).fill(0));
+  const [weeklyCompRentData, setWeeklyCompRentData] = useState(JSON.parse(sessionStorage.getItem("weeklyCompRentData")) || Array(16).fill(0));
+  const [weeklyDemandData, setWeeklyDemandData] = useState(JSON.parse(sessionStorage.getItem("weeklyDemandData")) || Array(16).fill(0));
+  const [weeklyPercentageLossData, setWeeklyPercentageLossData] = useState(JSON.parse(sessionStorage.getItem("weeklyPercentageLossData")) || Array(16).fill(0));
   const jsonData = require("./df.json"); 
   
   const [sum, setSum] = useState(50);
   const [maxDemand, setMaxDemand] = useState(5);
+
+  useEffect(() => {
+    
+    sessionStorage.setItem("currentWeekIndex", currentWeekIndex.toString());
+    sessionStorage.setItem("weeklyRentData", JSON.stringify(weeklyRentData));
+    sessionStorage.setItem("weeklyCompRentData", JSON.stringify(weeklyCompRentData));
+    sessionStorage.setItem("weeklyDemandData", JSON.stringify(weeklyDemandData));
+    sessionStorage.setItem("weeklyPercentageLossData", JSON.stringify(weeklyPercentageLossData));
+  }, [currentWeekIndex, weeklyRentData, weeklyCompRentData, weeklyDemandData, weeklyPercentageLossData]);
 
   const toggle = () => {
     if(currentWeekIndex >= 16){
@@ -200,7 +207,7 @@ const MonthlyPricing = () => {
       setCurrentWeekIndex(currentWeekIndex + 1);
 
     } else {
-      alert("Deven can this be the final screen?")
+      alert("can this be the final screen?")
       setShowCongratsModal(true);
       // Handle the case when all weeks have been filled
       
@@ -257,22 +264,14 @@ const MonthlyPricing = () => {
           <VerticalTable
               week={currentWeekIndex}
               income={weeklyDemandData[currentWeekIndex - 1]}
-              incomePercentage={weeklyPercentageLossData[currentWeekIndex - 1]}
+              incomePercentage={weeklyPercentageLossData}
               isYourDemand={weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1]}
             />
-            
-            
-            {/* <HorizontalTable
-              week={currentWeekIndex}
-              income={weeklyDemandData[currentWeekIndex - 1]}
-              incomePercentage={weeklyPercentageLossData[currentWeekIndex - 1]}
-              isYourDemand={weeklyRentData[currentWeekIndex - 1] < weeklyCompRentData[currentWeekIndex - 1]}
-            /> */}
-          </div>
+          </div> 
           <div className="rng-container">
             <DemandVsTimeGraph userData={graphRentData} maxRent={((maxDemand * 10) + (maxDemand * 2))} maxYaxis={maxDemand * 20}/>
             <div className="rent-setter-container">
-              <PropertySellForm onSell={handleFormSubmit} />
+              <PropertySellForm onSell={handleFormSubmit} currentWeek={currentWeekIndex + 1} />
               <p>{}</p>
             </div>
           </div>
