@@ -22,9 +22,9 @@ const DemandVsTimeGraph = ({ userData, maxRent, maxYaxis}) => {
         />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="userRent" stroke="#19A000" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="compRent" stroke="#FF0000" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="avgRent" stroke="#000000" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="Your Rent" stroke="#19A000" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="Comp Rent" stroke="#FF0000" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="Avg Rent" stroke="#000000" activeDot={{ r: 8 }} />
        
         <ReferenceArea y1={40} y2={maxRent} strokeOpacity={0.3} fill="green" fillOpacity={0.3} />
       </LineChart>

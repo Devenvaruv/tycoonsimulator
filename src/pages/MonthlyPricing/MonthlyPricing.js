@@ -216,9 +216,9 @@ const MonthlyPricing = () => {
 
   const graphRentData = weeklyRentData.map((rent, index) => ({
     time: `Week ${index+ 1}`,
-    userRent: rent,
-    compRent: weeklyCompRentData[index],
-    avgRent: sum,
+    'Your Rent': rent,
+    'Comp Rent': weeklyCompRentData[index],
+    'Avg Rent': sum,
   }));
   
   return (
@@ -241,14 +241,7 @@ const MonthlyPricing = () => {
           <div className="week-container">
             <h1>Comprehensive Property Insights</h1>
             <p>
-              Explore and download our comprehensive dataset, which offers a
-              historical analysis of financial performance for properties within
-              the {currentGameData.zipCode}. This rich dataset includes detailed
-              revenue and cost combinations for various types of properties,
-              from residential to commercial, providing a granular look at the
-              financial landscape of real estate in this area. Gain a
-              competitive edge by leveraging our curated data to inform your
-              strategic decisions.
+            Welcome to your personalized property insights board. Here are all the key financial number for your property, and information on how properties are in your area.
             </p>
             <h4>Zipcode: {currentGameData.zipCode}</h4>
             <h4>No of Rooms: {currentGameData.numberOfRooms}</h4>

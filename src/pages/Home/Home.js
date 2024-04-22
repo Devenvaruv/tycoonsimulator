@@ -27,7 +27,7 @@ const Home = () => {
 
             {/* Real Estate Powerhouse Paragraph */}
             <p className="intro-paragraph">
-                With the advent of platforms like Airbnb, Austin has become a hotspot for property
+                Austin has become a hotspot for property
                 investment. The city's diverse neighborhoods offer unique investment opportunities,
                 each with its distinct character and potential for varying returns on investment.
             </p>

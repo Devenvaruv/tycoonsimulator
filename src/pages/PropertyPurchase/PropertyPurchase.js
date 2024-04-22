@@ -16,7 +16,7 @@ const PropertyPurchase = () => {
         <div className="table-container">
           <h1>In-Depth Property Financials Analysis</h1>
           <p>
-            Access our tailored dataset for insights into property values and
+            Access our dataset for insights into property values and
             market trends. Customize your analysis by specifying room count,
             bathroom number, and property type to uncover market desirability,
             investment potential, and strategic planning opportunities.

@@ -5,19 +5,18 @@ const Contact = () => {
     return (
         <div className="contact-container">
             {/* Header */}
-            <h1>Contact Us</h1>
+            <h1 style={{color: '#00543C'}}>Contact Us</h1>
             <p>
-                Thank you for visiting our website. If you have any questions, feedback, or need assistance, please feel free to reach out to us. Our team is always ready to help you with your needs.
+                Thank you for visiting our website. If you have any questions, feedback, or need assistance, please feel free to reach out to us.
             </p>
 
             {/* General Inquiries or Support */}
             <p>For general inquiries or support:</p>
             
-            <p>Email: <a href="mailto:fake@gmail.com">fake@gmail.com</a></p>
+            <p>Email: <a href="mailto:tycoonsimusf@gmail.com">tycoonsimusf@gmail.com</a></p>
 
             {/* Services or Consultation */}
-            <p>for any technincal issues</p>
-            <p>Email: <a href="mailto:service@example.com">service@example.com</a></p>
+            <p>If you encounter any technical problems, kindly include a screenshot if you can.</p>
     
         </div>
 
