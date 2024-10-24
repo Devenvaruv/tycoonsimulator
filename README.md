@@ -24,13 +24,5 @@ As you play, you'll not only develop your skills as a property investor but also
 
 We welcome contributions to this project. Whether you're a developer, a real estate expert, or just someone interested in the growth of Austin, your insights and improvements are valuable.
 
-## License
-
-This project is licensed under [specify license]. Please see the LICENSE file for more details.
-
-## Contact
-
-For more information, questions, or feedback, please contact [project maintainer's contact information].
-
 ---
 
